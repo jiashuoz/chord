@@ -49,3 +49,7 @@ _testmain.go
 # For files created by specific development environment (e.g. editor),
 # use alternative ways to exclude files from git.
 # For example, set up .git/info/exclude or use a global .gitignore.
+
+/src/golang.org/*
+/src/golang.golang.org/*
+/src/github.com/*
