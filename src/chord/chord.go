@@ -20,11 +20,14 @@ const numBits = 3
 type ChordServer struct {
 	*chordrpc.Node // we never change this node, so no need to lock!!!
 
-	predecessor *chordrpc.Node
-	predRWMu    sync.RWMutex
+	predecessor     *chordrpc.Node
+	predecessorRWMu sync.RWMutex
 
-	fingerTable []*chordrpc.Node
-	fingerRWMu  sync.RWMutex
+	fingerTable     []*chordrpc.Node
+	fingerTableRWMu sync.RWMutex
+
+	successorList     []*chordrpc.Node
+	successorListRWMu sync.RWMutex
 
 	grpcServer *grpc.Server
 
@@ -120,9 +123,9 @@ func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
 		return errors.New("Node with same ID already exists in the ring")
 	}
 	checkError("join", err)
-	chord.fingerRWMu.Lock()
+	chord.fingerTableRWMu.Lock()
 	chord.fingerTable[0] = succ
-	chord.fingerRWMu.Unlock()
+	chord.fingerTableRWMu.Unlock()
 	return nil
 }
 
@@ -144,9 +147,9 @@ func (chord *ChordServer) stabilize() error {
 
 	// found new successor
 	if between(x.Id, chord.Id, succ.Id) {
-		chord.fingerRWMu.Lock()
+		chord.fingerTableRWMu.Lock()
 		chord.fingerTable[0] = x
-		chord.fingerRWMu.Unlock()
+		chord.fingerTableRWMu.Unlock()
 	}
 
 	chord.notifyRPC(chord.getSuccessor(), chord.Node)
@@ -155,8 +158,8 @@ func (chord *ChordServer) stabilize() error {
 
 // notify tells chord, potentialPred thinks it might be chord's predecessor.
 func (chord *ChordServer) notify(potentialPred *chordrpc.Node) error {
-	chord.predRWMu.Lock()
-	defer chord.predRWMu.Unlock()
+	chord.predecessorRWMu.Lock()
+	defer chord.predecessorRWMu.Unlock()
 	if chord.predecessor == nil || between(potentialPred.Id, chord.predecessor.Id, chord.Id) {
 		chord.predecessor = potentialPred
 	}
@@ -173,9 +176,9 @@ func (chord *ChordServer) fixFingers() {
 		DPrintf("fixFingers %v", err)
 		return
 	}
-	chord.fingerRWMu.Lock()
+	chord.fingerTableRWMu.Lock()
 	chord.fingerTable[i] = finger
-	chord.fingerRWMu.Unlock()
+	chord.fingerTableRWMu.Unlock()
 }
 
 // helper function used by fixFingers
@@ -231,8 +234,8 @@ func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 }
 
 func (chord *ChordServer) findClosestPrecedingNode(id []byte) *chordrpc.Node {
-	chord.fingerRWMu.RLock()
-	defer chord.fingerRWMu.RUnlock()
+	chord.fingerTableRWMu.RLock()
+	defer chord.fingerTableRWMu.RUnlock()
 	for i := numBits - 1; i >= 0; i-- {
 		if chord.fingerTable[i] != nil {
 			if between(chord.fingerTable[i].Id, chord.Id, id) {
@@ -244,14 +247,14 @@ func (chord *ChordServer) findClosestPrecedingNode(id []byte) *chordrpc.Node {
 }
 
 func (chord *ChordServer) getSuccessor() *chordrpc.Node {
-	chord.fingerRWMu.RLock()
-	defer chord.fingerRWMu.RUnlock()
+	chord.fingerTableRWMu.RLock()
+	defer chord.fingerTableRWMu.RUnlock()
 	return chord.fingerTable[0]
 }
 
 func (chord *ChordServer) getPredecessor() *chordrpc.Node {
-	chord.predRWMu.RLock()
-	defer chord.predRWMu.RUnlock()
+	chord.predecessorRWMu.RLock()
+	defer chord.predecessorRWMu.RUnlock()
 	return chord.predecessor
 }
 
@@ -272,10 +275,10 @@ func hash(ipAddr string) []byte {
 }
 
 func (chord *ChordServer) String() string {
-	chord.fingerRWMu.RLock()
-	chord.predRWMu.RLock()
-	defer chord.fingerRWMu.RUnlock()
-	defer chord.predRWMu.RUnlock()
+	chord.fingerTableRWMu.RLock()
+	chord.predecessorRWMu.RLock()
+	defer chord.fingerTableRWMu.RUnlock()
+	defer chord.predecessorRWMu.RUnlock()
 	str := chord.Node.String() + "\n"
 
 	str += "Finger table:\n"

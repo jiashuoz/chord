@@ -54,8 +54,8 @@ func (chord *ChordServer) GetPredecessor(context.Context, *chordrpc.NN) (*chordr
 // SetPredecessor sets predecessor for chord
 func (chord *ChordServer) SetPredecessor(ctx context.Context, pred *chordrpc.Node) (*chordrpc.NN, error) {
 	// need lock
-	chord.predRWMu.Lock()
-	defer chord.predRWMu.Unlock()
+	chord.predecessorRWMu.Lock()
+	defer chord.predecessorRWMu.Unlock()
 	chord.predecessor = pred
 
 	return &chordrpc.NN{}, nil
@@ -64,8 +64,8 @@ func (chord *ChordServer) SetPredecessor(ctx context.Context, pred *chordrpc.Nod
 // SetSuccessor sets predecessor for chord
 func (chord *ChordServer) SetSuccessor(ctx context.Context, succ *chordrpc.Node) (*chordrpc.NN, error) {
 	// need lock
-	chord.fingerRWMu.Lock()
-	defer chord.fingerRWMu.Unlock()
+	chord.fingerTableRWMu.Lock()
+	defer chord.fingerTableRWMu.Unlock()
 	chord.fingerTable[0] = succ
 
 	return &chordrpc.NN{}, nil
