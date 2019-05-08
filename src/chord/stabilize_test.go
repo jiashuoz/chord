@@ -9,60 +9,61 @@ import (
 	"time"
 )
 
-func TestJoin(t *testing.T) {
-	fmt.Println("Test Join")
+// Concurrent join, 1 3 6
+func TestConcurrentJoin1(t *testing.T) {
+	fmt.Println("Test TestConcurrentJoin 1")
+
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
-	checkError("TestJoin", err)
-
-	for {
-		fmt.Println(chord0.String())
-		fmt.Println()
-		time.Sleep(1 * time.Second)
-	}
-}
-
-// Figure 3 setup, don't change
-func TestStabilize0(t *testing.T) {
-	fmt.Println("Test Stabilize0, figure3")
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
-	checkError("TestStabilize0", err)
-	chord1, err := MakeChord(testAddrs[1], chord0.Node)
-	checkError("TestStabilize0", err)
-	chord3, err := MakeChord(testAddrs[3], chord0.Node)
-	checkError("TestStabilize0", err)
-
-	for {
-		fmt.Println(chord0.String())
-		fmt.Println(chord1.String())
-		fmt.Println(chord3.String())
+	chord0, _ := MakeChord(testAddrs[0], nil)
+	go func(index int) {
+		c1, _ := MakeChord(testAddrs[index], chord0.Node)
 		time.Sleep(5 * time.Second)
-	}
+		fmt.Println(c1.String())
+	}(1)
+
+	go func(index int) {
+		c6, _ := MakeChord(testAddrs[index], chord0.Node)
+		time.Sleep(5 * time.Second)
+		fmt.Println(c6.String())
+	}(6)
+
+	go func(index int) {
+		c3, _ := MakeChord(testAddrs[index], chord0.Node)
+		time.Sleep(5 * time.Second)
+		fmt.Println(c3.String())
+	}(3)
+
+	time.Sleep(5 * time.Second)
+	fmt.Println(chord0.String())
+	// Wait for all goroutines to print
+	time.Sleep(10 * time.Second)
 }
 
-// Figure 5 setup in the paper
-func TestStabilize1(t *testing.T) {
-	fmt.Println("Test Stabilize1, figure5")
+// Concurrent join 7 nodes
+func TestConcurrentJoin0(t *testing.T) {
+	fmt.Println("Test TestConcurrentJoin 0")
+
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
 	chord0, err := MakeChord(testAddrs[0], nil)
-	checkError("TestStabilize1", err)
-	chord1, err := MakeChord(testAddrs[1], chord0.Node)
-	checkError("TestStabilize1", err)
-	chord3, err := MakeChord(testAddrs[3], chord0.Node)
-	checkError("TestStabilize1", err)
-	chord6, err := MakeChord(testAddrs[6], chord0.Node)
-	checkError("TestStabilize1", err)
-
-	for {
-		fmt.Println(chord0.String())
-		fmt.Println(chord1.String())
-		fmt.Println(chord3.String())
-		fmt.Println(chord6.String())
-		time.Sleep(5 * time.Second)
+	for index := 1; index <= 7; index++ {
+		go func(index int) {
+			c, _ := MakeChord(testAddrs[index], chord0.Node)
+			time.Sleep(5 * time.Second)
+			fmt.Println(c.String())
+		}(index)
 	}
+
+	if err != nil {
+		checkError("TestStabilize2", err)
+	}
+
+	time.Sleep(5 * time.Second)
+	fmt.Println(chord0.String())
+	// Wait for all goroutines to print
+	time.Sleep(10 * time.Second)
 }
 
+// Ring in figure 5, with 8 nodes
 func TestStabilize2(t *testing.T) {
 	fmt.Println("Test Stabilize2")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
@@ -91,6 +92,61 @@ func TestStabilize2(t *testing.T) {
 		time.Sleep(10 * time.Second)
 	}
 }
+
+// Figure 3 setup, don't change
+func TestStabilize0(t *testing.T) {
+	fmt.Println("Test Stabilize0, figure3")
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	chord0, err := MakeChord(testAddrs[0], nil)
+	checkError("TestStabilize0", err)
+	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	checkError("TestStabilize0", err)
+	chord3, err := MakeChord(testAddrs[3], chord0.Node)
+	checkError("TestStabilize0", err)
+
+	for {
+		fmt.Println(chord0.String())
+		fmt.Println(chord1.String())
+		fmt.Println(chord3.String())
+		time.Sleep(5 * time.Second)
+	}
+}
+
+// Figure 5 setup in the paper, don't change
+func TestStabilize1(t *testing.T) {
+	fmt.Println("Test Stabilize1, figure5")
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	chord0, err := MakeChord(testAddrs[0], nil)
+	checkError("TestStabilize1", err)
+	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	checkError("TestStabilize1", err)
+	chord3, err := MakeChord(testAddrs[3], chord0.Node)
+	checkError("TestStabilize1", err)
+	chord6, err := MakeChord(testAddrs[6], chord0.Node)
+	checkError("TestStabilize1", err)
+
+	for {
+		fmt.Println(chord0.String())
+		fmt.Println(chord1.String())
+		fmt.Println(chord3.String())
+		fmt.Println(chord6.String())
+		time.Sleep(5 * time.Second)
+	}
+}
+
+func TestJoin(t *testing.T) {
+	fmt.Println("Test Join")
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	chord0, err := MakeChord(testAddrs[0], nil)
+	checkError("TestJoin", err)
+
+	for {
+		fmt.Println(chord0.String())
+		fmt.Println()
+		time.Sleep(1 * time.Second)
+	}
+}
+
 func TestMake(t *testing.T) {
 	fmt.Println("Test MakeChord")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)

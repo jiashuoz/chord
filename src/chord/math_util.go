@@ -40,13 +40,16 @@ func addBytesBigint(numberInBytes []byte, addend *big.Int) []byte {
 }
 
 func idsEqual(x, y []byte) bool {
+	if len(x) == 0 || len(y) == 0 {
+		panic("idsEqual: empty byte array")
+	}
 	return bytes.Equal(x, y)
 }
 
 // Returns true if x is between lo and hi
 func between(id []byte, lo []byte, hi []byte) bool {
 	if len(id) == 0 || len(lo) == 0 || len(hi) == 0 {
-		panic("empty byte array")
+		panic("between: empty byte array")
 	}
 	idInt := big.NewInt(0).SetBytes(id)
 	loInt := big.NewInt(0).SetBytes(lo)

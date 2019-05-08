@@ -2,6 +2,7 @@ package chord
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"github.com/jiashuoz/chord/chordrpc"
 	"google.golang.org/grpc"
@@ -12,8 +13,8 @@ import (
 	"time"
 )
 
-const stabilizeTime = 500 * time.Millisecond
-const fixFingerTime = 500 * time.Millisecond
+const stabilizeTime = 50 * time.Millisecond
+const fixFingerTime = 50 * time.Millisecond
 const numBits = 3
 
 type ChordServer struct {
@@ -28,6 +29,9 @@ type ChordServer struct {
 	grpcServer *grpc.Server
 
 	stopChan chan struct{} // struct is the smallest thing in go, memory usage low
+
+	rpcConnWrappers     map[string]*rpcConnWrapper // reuse existing conn to other servers
+	rpcConnWrappersRWMu sync.RWMutex
 }
 
 func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
@@ -38,9 +42,11 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 	chord.Id = hash(ip)
 	chord.fingerTable = make([]*chordrpc.Node, numBits)
 	chord.stopChan = make(chan struct{})
+	chord.rpcConnWrappers = make(map[string]*rpcConnWrapper)
 
 	listener, err := net.Listen("tcp", ip)
 	if err != nil {
+		checkError("", err)
 		return nil, err
 	}
 
@@ -52,6 +58,7 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 
 	err = chord.join(joinNode)
 	if err != nil {
+		checkError("", err)
 		return nil, err
 	}
 
@@ -60,12 +67,10 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 		for {
 			select {
 			case <-ticker.C:
-				err := chord.stabilize()
-				if err != nil {
-					DPrintf("stabilize error: %v", err)
-				}
+				go chord.stabilize()
 			case <-chord.stopChan:
 				ticker.Stop()
+				DPrintf("%v Stopping stabilize", chord.Id)
 				return
 			}
 		}
@@ -76,9 +81,10 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 		for {
 			select {
 			case <-ticker.C:
-				chord.fixFingers()
+				go chord.fixFingers()
 			case <-chord.stopChan:
 				ticker.Stop()
+				DPrintf("%v Stopping fixFingers", chord.Id)
 				return
 			}
 		}
@@ -87,14 +93,32 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 	return chord, nil
 }
 
+func (chord *ChordServer) Stop(params ...string) {
+	fmt.Printf("%v is stopping....\n", chord.Id)
+	for _, stopMsg := range params {
+		fmt.Println(stopMsg)
+	}
+	// Stop all goroutines
+	close(chord.stopChan)
+
+	for _, rpcConnWrapper := range chord.rpcConnWrappers {
+		err := rpcConnWrapper.conn.Close()
+		checkError("Stop", err)
+	}
+}
+
 func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
+	chord.predecessor = nil
 	if joinNode == nil { // only node in the ring
 		chord.fingerTable[0] = chord.Node
 		// chord.predecessor = chord.Node
 		return nil
 	}
-	chord.predecessor = nil
 	succ, err := chord.findSuccessorRPC(joinNode, chord.Id)
+	if idsEqual(succ.Id, chord.Id) {
+		chord.Stop("Node with same ID already exists in the ring")
+		return errors.New("Node with same ID already exists in the ring")
+	}
 	checkError("join", err)
 	chord.fingerRWMu.Lock()
 	chord.fingerTable[0] = succ
@@ -105,8 +129,13 @@ func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
 // periodically verify's chord's immediate successor
 func (chord *ChordServer) stabilize() error {
 	succ := chord.getSuccessor()
-	x, _ := chord.getPredecessorRPC(succ) // if err != nil, that only means pred == nil, we want to proceed
+	x, err := chord.getPredecessorRPC(succ)
 
+	// RPC fails
+	if err != nil {
+		DPrintf("stabilize error: %v", err)
+		return err
+	}
 	// the pred of our succ is nil, it hasn't updated it pred, still notify
 	if x.Id == nil {
 		chord.notifyRPC(chord.getSuccessor(), chord.Node)
@@ -139,8 +168,10 @@ func (chord *ChordServer) fixFingers() {
 	i := rand.Intn(numBits-1) + 1
 	fingerStart := chord.fingerStart(i)
 	finger, err := chord.findSuccessor(fingerStart)
+	// Either RPC fails or something fails...
 	if err != nil {
-		checkError("fixFingers", err)
+		DPrintf("fixFingers %v", err)
+		return
 	}
 	chord.fingerRWMu.Lock()
 	chord.fingerTable[i] = finger
