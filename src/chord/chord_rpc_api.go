@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+// rpcConnWrapper contains grpc.ClientConn and chordrpc.ChordClient
+type rpcConnWrapper struct {
+	conn        *grpc.ClientConn
+	chordClient chordrpc.ChordClient
+}
+
 func Dial(ip string) (*grpc.ClientConn, error) {
 	return grpc.Dial(ip,
 		grpc.WithBlock(),
@@ -18,6 +24,13 @@ func Dial(ip string) (*grpc.ClientConn, error) {
 
 func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordClient, error) {
 	ip := remote.Ip
+	chord.rpcConnWrappersRWMu.RLock()
+	rpcConn, ok := chord.rpcConnWrappers[ip]
+	chord.rpcConnWrappersRWMu.RUnlock()
+
+	if ok {
+		return rpcConn.chordClient, nil
+	}
 
 	conn, err := Dial(ip)
 	if err != nil {
@@ -27,6 +40,10 @@ func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordCl
 
 	chordClient := chordrpc.NewChordClient(conn)
 
+	rpcConn = &rpcConnWrapper{conn, chordClient}
+	chord.rpcConnWrappersRWMu.Lock()
+	chord.rpcConnWrappers[ip] = rpcConn
+	chord.rpcConnWrappersRWMu.Unlock()
 	return chordClient, nil
 }
 
@@ -34,33 +51,43 @@ func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordCl
 func (chord *ChordServer) notifyRPC(remote *chordrpc.Node, potentialPred *chordrpc.Node) (*chordrpc.NN, error) {
 	client, _ := chord.connectRemote(remote)
 
-	return client.Notify(context.Background(), potentialPred)
+	result, err := client.Notify(context.Background(), potentialPred)
+	checkErrorGrace("Notify", err)
+	return result, err
 }
 
 // findSuccessorRPC sends RPC call to remote node
 func (chord *ChordServer) findSuccessorRPC(remote *chordrpc.Node, id []byte) (*chordrpc.Node, error) {
 	client, _ := chord.connectRemote(remote)
 
-	return client.FindSuccessor(context.Background(), &chordrpc.ID{Id: id})
+	result, err := client.FindSuccessor(context.Background(), &chordrpc.ID{Id: id})
+	checkErrorGrace("FindSuccessor", err)
+	return result, err
 }
 
 // findClosestPrecedingNodeRPC sends RPC call to remote node, returns closest node based on id
 func (chord *ChordServer) findClosestPrecedingNodeRPC(remote *chordrpc.Node, id []byte) (*chordrpc.Node, error) {
 	client, _ := chord.connectRemote(remote)
 
-	return client.FindClosestPrecedingNode(context.Background(), &chordrpc.ID{Id: id})
+	result, err := client.FindClosestPrecedingNode(context.Background(), &chordrpc.ID{Id: id})
+	checkErrorGrace("findClosestPrecedingNodeRPC", err)
+	return result, err
 }
 
 // GetSuccessorRPC sends RPC call to remote node
 func (chord *ChordServer) getSuccessorRPC(remote *chordrpc.Node) (*chordrpc.Node, error) {
 	client, _ := chord.connectRemote(remote)
 
-	return client.GetSuccessor(context.Background(), &chordrpc.NN{})
+	result, err := client.GetSuccessor(context.Background(), &chordrpc.NN{})
+	checkErrorGrace("getSuccessorRPC", err)
+	return result, err
 }
 
 // GetPredecessorRPC sends RPC call to remote node
 func (chord *ChordServer) getPredecessorRPC(remote *chordrpc.Node) (*chordrpc.Node, error) {
 	client, _ := chord.connectRemote(remote)
 
-	return client.GetPredecessor(context.Background(), &chordrpc.NN{})
+	result, err := client.GetPredecessor(context.Background(), &chordrpc.NN{})
+	checkErrorGrace("getPredecessorRPC", err)
+	return result, err
 }
