@@ -6,8 +6,67 @@ import (
 	"github.com/jiashuoz/chord/chordrpc"
 	"os"
 	"testing"
+	"time"
 )
 
+func TestJoin(t *testing.T) {
+	fmt.Println("Test Join")
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	chord0, err := MakeChord(testAddrs[0], nil)
+
+	if err != nil {
+		checkError(err)
+	}
+
+	for {
+		fmt.Println(chord0.String())
+		fmt.Println()
+		time.Sleep(1 * time.Second)
+	}
+}
+
+// Figure 3 setup, don't change
+func TestStabilize0(t *testing.T) {
+	fmt.Println("Test Stabilize")
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	chord0, err := MakeChord(testAddrs[0], nil)
+	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	chord3, err := MakeChord(testAddrs[3], chord0.Node)
+
+	if err != nil {
+		checkError(err)
+	}
+
+	for {
+		fmt.Println(chord0.String())
+		fmt.Println(chord1.String())
+		fmt.Println(chord3.String())
+		time.Sleep(5 * time.Second)
+	}
+}
+
+// Figure 5 setup in the paper
+func TestStabilize1(t *testing.T) {
+	fmt.Println("Test Stabilize")
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	chord0, err := MakeChord(testAddrs[0], nil)
+	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	chord3, err := MakeChord(testAddrs[3], chord0.Node)
+
+	chord6, err := MakeChord(testAddrs[6], chord0.Node)
+
+	if err != nil {
+		checkError(err)
+	}
+
+	for {
+		fmt.Println(chord0.String())
+		fmt.Println(chord1.String())
+		fmt.Println(chord3.String())
+		fmt.Println(chord6.String())
+		time.Sleep(5 * time.Second)
+	}
+}
 func TestMake(t *testing.T) {
 	fmt.Println("Test MakeChord")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)

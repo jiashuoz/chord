@@ -2,6 +2,7 @@ package chord
 
 import (
 	"context"
+	"errors"
 	"github.com/jiashuoz/chord/chordrpc"
 )
 
@@ -31,10 +32,9 @@ func (chord *ChordServer) FindClosestPrecedingNode(ctx context.Context, id *chor
 // GetSuccessor gets the successor of the node.
 func (chord *ChordServer) GetSuccessor(context.Context, *chordrpc.NN) (*chordrpc.Node, error) {
 	// need lock
-	succ := chord.fingerTable[0]
-
+	succ := chord.getSuccessor()
 	if succ == nil {
-		return &chordrpc.Node{}, nil
+		return &chordrpc.Node{}, errors.New("successor is nil")
 	}
 
 	return succ, nil
@@ -43,10 +43,10 @@ func (chord *ChordServer) GetSuccessor(context.Context, *chordrpc.NN) (*chordrpc
 // GetPredecessor gets the predecessor of the node.
 func (chord *ChordServer) GetPredecessor(context.Context, *chordrpc.NN) (*chordrpc.Node, error) {
 	// need lock
-	pred := chord.predecessor
+	pred := chord.getPredecessor()
 
 	if pred == nil {
-		return &chordrpc.Node{}, nil
+		return &chordrpc.Node{}, errors.New("predecessor is nil")
 	}
 
 	return pred, nil
@@ -55,6 +55,8 @@ func (chord *ChordServer) GetPredecessor(context.Context, *chordrpc.NN) (*chordr
 // SetPredecessor sets predecessor for chord
 func (chord *ChordServer) SetPredecessor(ctx context.Context, pred *chordrpc.Node) (*chordrpc.NN, error) {
 	// need lock
+	chord.predRWMu.Lock()
+	defer chord.predRWMu.Unlock()
 	chord.predecessor = pred
 
 	return &chordrpc.NN{}, nil
@@ -63,6 +65,8 @@ func (chord *ChordServer) SetPredecessor(ctx context.Context, pred *chordrpc.Nod
 // SetSuccessor sets predecessor for chord
 func (chord *ChordServer) SetSuccessor(ctx context.Context, succ *chordrpc.Node) (*chordrpc.NN, error) {
 	// need lock
+	chord.fingerRWMu.Lock()
+	defer chord.fingerRWMu.Unlock()
 	chord.fingerTable[0] = succ
 
 	return &chordrpc.NN{}, nil

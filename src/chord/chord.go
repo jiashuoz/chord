@@ -2,24 +2,32 @@ package chord
 
 import (
 	"crypto/sha1"
-	"errors"
 	"fmt"
 	"github.com/jiashuoz/chord/chordrpc"
 	"google.golang.org/grpc"
 	"math/big"
+	"math/rand"
 	"net"
+	"sync"
+	"time"
 )
 
+const stabilizeTime = 500 * time.Millisecond
+const fixFingerTime = 500 * time.Millisecond
 const numBits = 3
 
 type ChordServer struct {
-	*chordrpc.Node
+	*chordrpc.Node // we never change this node, so no need to lock!!!
 
 	predecessor *chordrpc.Node
+	predRWMu    sync.RWMutex
 
 	fingerTable []*chordrpc.Node
+	fingerRWMu  sync.RWMutex
 
 	grpcServer *grpc.Server
+
+	stopChan chan struct{} // struct is the smallest thing in go, memory usage low
 }
 
 func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
@@ -29,6 +37,7 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 	chord.Ip = ip
 	chord.Id = hash(ip)
 	chord.fingerTable = make([]*chordrpc.Node, numBits)
+	chord.stopChan = make(chan struct{})
 
 	listener, err := net.Listen("tcp", ip)
 	if err != nil {
@@ -46,44 +55,112 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 		return nil, err
 	}
 
+	go func() {
+		ticker := time.NewTicker(stabilizeTime)
+		for {
+			select {
+			case <-ticker.C:
+				err := chord.stabilize()
+				if err != nil {
+					DPrintf("stabilize error: %v", err)
+				}
+			case <-chord.stopChan:
+				ticker.Stop()
+				return
+			}
+		}
+	}()
+
+	go func() {
+		ticker := time.NewTicker(fixFingerTime)
+		for {
+			select {
+			case <-ticker.C:
+				chord.fixFingers()
+			case <-chord.stopChan:
+				ticker.Stop()
+				return
+			}
+		}
+	}()
+
 	return chord, nil
+}
+
+func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
+	if joinNode == nil { // only node in the ring
+		chord.fingerTable[0] = chord.Node
+		// chord.predecessor = chord.Node
+		return nil
+	}
+	chord.predecessor = nil
+	succ, err := chord.findSuccessorRPC(joinNode, chord.Id)
+	checkError(err)
+	chord.fingerRWMu.Lock()
+	chord.fingerTable[0] = succ
+	chord.fingerRWMu.Unlock()
+	return nil
+}
+
+// periodically verify's chord's immediate successor
+func (chord *ChordServer) stabilize() error {
+	succ := chord.getSuccessor()
+	x, err := chord.getPredecessorRPC(succ)
+	if err != nil {
+		return err
+	}
+
+	// the pred of our succ is nil, it hasn't updated it pred, still notify
+	if x.Id == nil {
+		chord.notifyRPC(chord.getSuccessor(), chord.Node)
+		return nil
+	}
+
+	// found new successor
+	if between(x.Id, chord.Id, succ.Id) {
+		chord.fingerRWMu.Lock()
+		chord.fingerTable[0] = x
+		chord.fingerRWMu.Unlock()
+	}
+
+	chord.notifyRPC(chord.getSuccessor(), chord.Node)
+	return nil
 }
 
 // notify tells chord, potentialPred thinks it might be chord's predecessor.
 func (chord *ChordServer) notify(potentialPred *chordrpc.Node) error {
+	chord.predRWMu.Lock()
+	defer chord.predRWMu.Unlock()
+	if chord.predecessor == nil || between(potentialPred.Id, chord.predecessor.Id, chord.Id) {
+		chord.predecessor = potentialPred
+	}
 	return nil
 }
 
-func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
-	if joinNode != nil {
-		remote, err := chord.findSuccessorRPC(joinNode, chord.Id)
-		if err != nil {
-			return err
-		}
-		remotePred, err := chord.getPredecessorRPC(joinNode)
-		if err != nil {
-			return err
-		}
-		if idsEqual(remote.Id, chord.Id) {
-			return errors.New("Duplicate IDs")
-		}
-		chord.fingerTable[0] = new(chordrpc.Node)
-		chord.fingerTable[0].Id = remote.Id
-		chord.fingerTable[0].Ip = remote.Ip
-		chord.predecessor = new(chordrpc.Node)
-		chord.predecessor.Id = remotePred.Id
-		chord.predecessor.Ip = remotePred.Ip
-	} else { // chord is the only one in the ring
-		for i := 0; i < numBits; i++ {
-			chord.fingerTable[i] = new(chordrpc.Node)
-			chord.fingerTable[i].Id = chord.Id
-			chord.fingerTable[i].Ip = chord.Ip
-		}
-		chord.predecessor = new(chordrpc.Node)
-		chord.predecessor.Id = chord.Id
-		chord.predecessor.Ip = chord.Ip
+// periodically refresh finger table entries
+func (chord *ChordServer) fixFingers() {
+	i := rand.Intn(numBits-1) + 1
+	fingerStart := chord.fingerStart(i)
+	finger, err := chord.findSuccessor(fingerStart)
+	if err != nil {
+		checkError(err)
 	}
-	return nil
+	chord.fingerRWMu.Lock()
+	chord.fingerTable[i] = finger
+	chord.fingerRWMu.Unlock()
+}
+
+// helper function used by fixFingers
+func (chord *ChordServer) fingerStart(i int) []byte {
+	currID := new(big.Int).SetBytes(chord.Id)
+	offset := new(big.Int).Exp(big.NewInt(2), big.NewInt(int64(i)), nil)
+	maxVal := big.NewInt(0).Exp(big.NewInt(2), big.NewInt(numBits), nil)
+	start := new(big.Int).Add(currID, offset)
+	start.Mod(start, maxVal)
+	if len(start.Bytes()) == 0 {
+		return []byte{0}
+	}
+	return start.Bytes()
 }
 
 func (chord *ChordServer) findSuccessor(id []byte) (*chordrpc.Node, error) {
@@ -126,12 +203,28 @@ func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 }
 
 func (chord *ChordServer) findClosestPrecedingNode(id []byte) *chordrpc.Node {
+	chord.fingerRWMu.RLock()
+	defer chord.fingerRWMu.RUnlock()
 	for i := numBits - 1; i >= 0; i-- {
-		if chord.fingerTable[i] != nil && between(chord.fingerTable[i].Id, chord.Id, id) {
-			return chord.fingerTable[i]
+		if chord.fingerTable[i] != nil {
+			if between(chord.fingerTable[i].Id, chord.Id, id) {
+				return chord.fingerTable[i]
+			}
 		}
 	}
 	return chord.Node
+}
+
+func (chord *ChordServer) getSuccessor() *chordrpc.Node {
+	chord.fingerRWMu.RLock()
+	defer chord.fingerRWMu.RUnlock()
+	return chord.fingerTable[0]
+}
+
+func (chord *ChordServer) getPredecessor() *chordrpc.Node {
+	chord.predRWMu.RLock()
+	defer chord.predRWMu.RUnlock()
+	return chord.predecessor
 }
 
 func hash(ipAddr string) []byte {
@@ -156,6 +249,9 @@ func (chord *ChordServer) String() string {
 	str += "Finger table:\n"
 	str += "ith | start | successor\n"
 	for i := 0; i < numBits; i++ {
+		if chord.fingerTable[i] == nil {
+			continue
+		}
 		currID := new(big.Int).SetBytes(chord.Id)
 		offset := new(big.Int).Exp(big.NewInt(2), big.NewInt(int64(i)), nil)
 		maxVal := big.NewInt(0)
@@ -165,6 +261,12 @@ func (chord *ChordServer) String() string {
 		successor := chord.fingerTable[i].Id
 		str += fmt.Sprintf("%d   | %d     | %d\n", i, start, successor)
 	}
-	str += fmt.Sprintf("Predecessor: %v", chord.predecessor.Id)
+
+	str += fmt.Sprintf("Predecessor: ")
+	if chord.predecessor == nil {
+		str += fmt.Sprintf("none")
+	} else {
+		str += fmt.Sprintf("%v", chord.predecessor.Id)
+	}
 	return str
 }
