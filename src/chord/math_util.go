@@ -90,8 +90,8 @@ func intToByteArray(i int) []byte {
 	return big.NewInt(int64(i)).Bytes()
 }
 
-func reverseHash(numBits int, ipAddr string, startPortNum int) []string {
-	numNodes := int(math.Pow(2, float64(numBits)))
+func reverseHash(exp int, ipAddr string, startPortNum int) []string {
+	numNodes := int(math.Pow(2, float64(exp)))
 	ips := make([]string, numNodes)
 	for i := 0; i < numNodes; startPortNum++ {
 		testAddr := fmt.Sprintf("%s:%d", ipAddr, startPortNum)
@@ -100,7 +100,6 @@ func reverseHash(numBits int, ipAddr string, startPortNum int) []string {
 			ips[i] = testAddr
 			i++
 		}
-
 	}
 	return ips
 }

@@ -15,7 +15,9 @@ import (
 
 const stabilizeTime = 50 * time.Millisecond
 const fixFingerTime = 50 * time.Millisecond
-const numBits = 3
+const numBits = 4
+const numBits4 = 4
+const r = 4
 
 type ChordServer struct {
 	*chordrpc.Node // we never change this node, so no need to lock!!!
@@ -26,7 +28,7 @@ type ChordServer struct {
 	fingerTable     []*chordrpc.Node
 	fingerTableRWMu sync.RWMutex
 
-	successorList     []*chordrpc.Node
+	successorList     []*chordrpc.Node // keep track of log(n) nearest successor for recovery
 	successorListRWMu sync.RWMutex
 
 	grpcServer *grpc.Server
@@ -46,6 +48,7 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 	chord.fingerTable = make([]*chordrpc.Node, numBits)
 	chord.stopChan = make(chan struct{})
 	chord.rpcConnWrappers = make(map[string]*rpcConnWrapper)
+	chord.successorList = make([]*chordrpc.Node, numBits)
 
 	listener, err := net.Listen("tcp", ip)
 	if err != nil {
@@ -114,6 +117,7 @@ func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
 	chord.predecessor = nil
 	if joinNode == nil { // only node in the ring
 		chord.fingerTable[0] = chord.Node
+		chord.successorList[0] = chord.Node
 		// chord.predecessor = chord.Node
 		return nil
 	}
@@ -134,8 +138,8 @@ func (chord *ChordServer) stabilize() error {
 	succ := chord.getSuccessor()
 	x, err := chord.getPredecessorRPC(succ)
 
-	// RPC fails
-	if err != nil {
+	// RPC fails or the successor node died...
+	if x == nil || err != nil {
 		DPrintf("stabilize error: %v", err)
 		return err
 	}
@@ -279,7 +283,7 @@ func (chord *ChordServer) String() string {
 	chord.predecessorRWMu.RLock()
 	defer chord.fingerTableRWMu.RUnlock()
 	defer chord.predecessorRWMu.RUnlock()
-	str := chord.Node.String() + "\n"
+	str := fmt.Sprintf("id: %v ip: %v\n", chord.Id, chord.Ip)
 
 	str += "Finger table:\n"
 	str += "ith | start | successor\n"

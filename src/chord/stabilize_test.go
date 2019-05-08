@@ -9,6 +9,33 @@ import (
 	"time"
 )
 
+func TestConcurrentJoin2(t *testing.T) {
+	fmt.Println("Test TestConcurrentJoin 2")
+	testAddrs := reverseHash(numBits4, "127.0.0.1", 5000)
+
+	chord0, _ := MakeChord(testAddrs[0], nil)
+
+	launchChord := func(index int, joinNode *chordrpc.Node) {
+		c, _ := MakeChord(testAddrs[index], joinNode)
+		fmt.Printf("initializing %v %v %v\n", index, testAddrs[index], c.Id)
+		time.Sleep(5 * time.Second)
+		fmt.Println(c.String())
+	}
+
+	go launchChord(1, chord0.Node)
+	go launchChord(3, chord0.Node)
+	go launchChord(6, chord0.Node)
+	go launchChord(7, chord0.Node)
+	go launchChord(11, chord0.Node)
+	go launchChord(14, chord0.Node)
+
+	time.Sleep(5 * time.Second)
+
+	fmt.Println(chord0.String())
+
+	time.Sleep(5 * time.Second)
+}
+
 // Concurrent join, 1 3 6
 func TestConcurrentJoin1(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 1")
@@ -16,18 +43,21 @@ func TestConcurrentJoin1(t *testing.T) {
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
 	chord0, _ := MakeChord(testAddrs[0], nil)
 	go func(index int) {
+		fmt.Printf("initializing %v\n", index)
 		c1, _ := MakeChord(testAddrs[index], chord0.Node)
 		time.Sleep(5 * time.Second)
 		fmt.Println(c1.String())
 	}(1)
 
 	go func(index int) {
+		fmt.Printf("initializing %v\n", index)
 		c6, _ := MakeChord(testAddrs[index], chord0.Node)
 		time.Sleep(5 * time.Second)
 		fmt.Println(c6.String())
 	}(6)
 
 	go func(index int) {
+		fmt.Printf("initializing %v\n", index)
 		c3, _ := MakeChord(testAddrs[index], chord0.Node)
 		time.Sleep(5 * time.Second)
 		fmt.Println(c3.String())
