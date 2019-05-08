@@ -95,7 +95,7 @@ func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
 	}
 	chord.predecessor = nil
 	succ, err := chord.findSuccessorRPC(joinNode, chord.Id)
-	checkError(err)
+	checkError("join", err)
 	chord.fingerRWMu.Lock()
 	chord.fingerTable[0] = succ
 	chord.fingerRWMu.Unlock()
@@ -105,10 +105,7 @@ func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
 // periodically verify's chord's immediate successor
 func (chord *ChordServer) stabilize() error {
 	succ := chord.getSuccessor()
-	x, err := chord.getPredecessorRPC(succ)
-	if err != nil {
-		return err
-	}
+	x, _ := chord.getPredecessorRPC(succ) // if err != nil, that only means pred == nil, we want to proceed
 
 	// the pred of our succ is nil, it hasn't updated it pred, still notify
 	if x.Id == nil {
@@ -143,7 +140,7 @@ func (chord *ChordServer) fixFingers() {
 	fingerStart := chord.fingerStart(i)
 	finger, err := chord.findSuccessor(fingerStart)
 	if err != nil {
-		checkError(err)
+		checkError("fixFingers", err)
 	}
 	chord.fingerRWMu.Lock()
 	chord.fingerTable[i] = finger
@@ -244,6 +241,10 @@ func hash(ipAddr string) []byte {
 }
 
 func (chord *ChordServer) String() string {
+	chord.fingerRWMu.RLock()
+	chord.predRWMu.RLock()
+	defer chord.fingerRWMu.RUnlock()
+	defer chord.predRWMu.RUnlock()
 	str := chord.Node.String() + "\n"
 
 	str += "Finger table:\n"

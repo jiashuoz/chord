@@ -2,13 +2,11 @@ package chord
 
 import (
 	"context"
-	"errors"
 	"github.com/jiashuoz/chord/chordrpc"
 )
 
 // Notify notifies Chord that potentialPred thinks it might be the predecessor
 func (chord *ChordServer) Notify(ctx context.Context, potentialPred *chordrpc.Node) (*chordrpc.NN, error) {
-	// need lock
 	chord.notify(potentialPred)
 
 	return &chordrpc.NN{}, nil
@@ -34,7 +32,7 @@ func (chord *ChordServer) GetSuccessor(context.Context, *chordrpc.NN) (*chordrpc
 	// need lock
 	succ := chord.getSuccessor()
 	if succ == nil {
-		return &chordrpc.Node{}, errors.New("successor is nil")
+		return &chordrpc.Node{}, nil
 	}
 
 	return succ, nil
@@ -45,8 +43,9 @@ func (chord *ChordServer) GetPredecessor(context.Context, *chordrpc.NN) (*chordr
 	// need lock
 	pred := chord.getPredecessor()
 
+	// if pred == nil, simply return an empty node to indicate that, err should be nil, otherwise rpc won't work
 	if pred == nil {
-		return &chordrpc.Node{}, errors.New("predecessor is nil")
+		return &chordrpc.Node{}, nil
 	}
 
 	return pred, nil

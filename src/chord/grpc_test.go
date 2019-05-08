@@ -13,10 +13,7 @@ func TestJoin(t *testing.T) {
 	fmt.Println("Test Join")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
 	chord0, err := MakeChord(testAddrs[0], nil)
-
-	if err != nil {
-		checkError(err)
-	}
+	checkError("TestJoin", err)
 
 	for {
 		fmt.Println(chord0.String())
@@ -27,15 +24,14 @@ func TestJoin(t *testing.T) {
 
 // Figure 3 setup, don't change
 func TestStabilize0(t *testing.T) {
-	fmt.Println("Test Stabilize")
+	fmt.Println("Test Stabilize0, figure3")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
 	chord0, err := MakeChord(testAddrs[0], nil)
+	checkError("TestStabilize0", err)
 	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	checkError("TestStabilize0", err)
 	chord3, err := MakeChord(testAddrs[3], chord0.Node)
-
-	if err != nil {
-		checkError(err)
-	}
+	checkError("TestStabilize0", err)
 
 	for {
 		fmt.Println(chord0.String())
@@ -47,17 +43,16 @@ func TestStabilize0(t *testing.T) {
 
 // Figure 5 setup in the paper
 func TestStabilize1(t *testing.T) {
-	fmt.Println("Test Stabilize")
+	fmt.Println("Test Stabilize1, figure5")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
 	chord0, err := MakeChord(testAddrs[0], nil)
+	checkError("TestStabilize1", err)
 	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	checkError("TestStabilize1", err)
 	chord3, err := MakeChord(testAddrs[3], chord0.Node)
-
+	checkError("TestStabilize1", err)
 	chord6, err := MakeChord(testAddrs[6], chord0.Node)
-
-	if err != nil {
-		checkError(err)
-	}
+	checkError("TestStabilize1", err)
 
 	for {
 		fmt.Println(chord0.String())
@@ -65,6 +60,35 @@ func TestStabilize1(t *testing.T) {
 		fmt.Println(chord3.String())
 		fmt.Println(chord6.String())
 		time.Sleep(5 * time.Second)
+	}
+}
+
+func TestStabilize2(t *testing.T) {
+	fmt.Println("Test Stabilize2")
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	chord0, err := MakeChord(testAddrs[0], nil)
+	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	chord2, err := MakeChord(testAddrs[2], chord1.Node)
+	chord3, err := MakeChord(testAddrs[3], chord2.Node)
+	chord4, err := MakeChord(testAddrs[4], chord3.Node)
+	chord5, err := MakeChord(testAddrs[5], chord2.Node)
+	chord6, err := MakeChord(testAddrs[6], chord1.Node)
+	chord7, err := MakeChord(testAddrs[7], chord0.Node)
+
+	if err != nil {
+		checkError("TestStabilize2", err)
+	}
+
+	for {
+		fmt.Println(chord0.String())
+		fmt.Println(chord1.String())
+		fmt.Println(chord2.String())
+		fmt.Println(chord3.String())
+		fmt.Println(chord4.String())
+		fmt.Println(chord5.String())
+		fmt.Println(chord6.String())
+		fmt.Println(chord7.String())
+		time.Sleep(10 * time.Second)
 	}
 }
 func TestMake(t *testing.T) {
@@ -139,19 +163,17 @@ func TestFindSuccessor(t *testing.T) {
 
 	// FindSuccessor of key 0, call three servers, result should always be 0
 	key0Succ, err := chord0.findSuccessor(ba0)
-	checkError(err)
+	checkError("TestFindSuccessor", err)
 	if !bytes.Equal(key0Succ.Id, intToByteArray(0)) {
 		t.Errorf("Find successor from node %d got = %d; want 0", chord0.GetId(), key0Succ.Id)
 	}
 
 	key0Succ, err = chord1.findSuccessor(ba0)
-	checkError(err)
 	if !bytes.Equal(key0Succ.Id, intToByteArray(0)) {
 		t.Errorf("Find successor from node %d got = %d; want 0", chord1.GetId(), key0Succ.Id)
 	}
 
 	key0Succ, err = chord3.findSuccessor(ba0)
-	checkError(err)
 	if !bytes.Equal(key0Succ.Id, intToByteArray(0)) {
 		t.Errorf("Find successor from node %d got = %d; want 0", chord3.GetId(), key0Succ.Id)
 	}

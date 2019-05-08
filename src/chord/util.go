@@ -16,9 +16,8 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 	return
 }
 
-func checkError(err error) {
+func checkError(source string, err error) {
 	if err != nil {
-		log.Fatal(err)
-		// fmt.Fprintf(os.Stderr, "%s\n", err.Error())
+		log.Fatal(source, ": ", err)
 	}
 }

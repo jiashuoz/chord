@@ -21,6 +21,7 @@ func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordCl
 
 	conn, err := Dial(ip)
 	if err != nil {
+		checkError("connectRemote", err) // if any Dial error, crash the program
 		return nil, err
 	}
 
@@ -31,50 +32,35 @@ func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordCl
 
 // findSuccessorRPC sends RPC call to remote node
 func (chord *ChordServer) notifyRPC(remote *chordrpc.Node, potentialPred *chordrpc.Node) (*chordrpc.NN, error) {
-	client, err := chord.connectRemote(remote)
-	if err != nil {
-		return nil, err
-	}
+	client, _ := chord.connectRemote(remote)
 
 	return client.Notify(context.Background(), potentialPred)
 }
 
 // findSuccessorRPC sends RPC call to remote node
 func (chord *ChordServer) findSuccessorRPC(remote *chordrpc.Node, id []byte) (*chordrpc.Node, error) {
-	client, err := chord.connectRemote(remote)
-	if err != nil {
-		return nil, err
-	}
+	client, _ := chord.connectRemote(remote)
 
 	return client.FindSuccessor(context.Background(), &chordrpc.ID{Id: id})
 }
 
 // findClosestPrecedingNodeRPC sends RPC call to remote node, returns closest node based on id
 func (chord *ChordServer) findClosestPrecedingNodeRPC(remote *chordrpc.Node, id []byte) (*chordrpc.Node, error) {
-	client, err := chord.connectRemote(remote)
-	if err != nil {
-		return nil, err
-	}
+	client, _ := chord.connectRemote(remote)
 
 	return client.FindClosestPrecedingNode(context.Background(), &chordrpc.ID{Id: id})
 }
 
 // GetSuccessorRPC sends RPC call to remote node
 func (chord *ChordServer) getSuccessorRPC(remote *chordrpc.Node) (*chordrpc.Node, error) {
-	client, err := chord.connectRemote(remote)
-	if err != nil {
-		return nil, err
-	}
+	client, _ := chord.connectRemote(remote)
 
 	return client.GetSuccessor(context.Background(), &chordrpc.NN{})
 }
 
 // GetPredecessorRPC sends RPC call to remote node
 func (chord *ChordServer) getPredecessorRPC(remote *chordrpc.Node) (*chordrpc.Node, error) {
-	client, err := chord.connectRemote(remote)
-	if err != nil {
-		return nil, err
-	}
+	client, _ := chord.connectRemote(remote)
 
 	return client.GetPredecessor(context.Background(), &chordrpc.NN{})
 }
