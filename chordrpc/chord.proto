@@ -2,26 +2,19 @@ syntax = "proto3";
 
 package chordrpc;
 
-// Chord is the service for inter-node communication.
-// This has all the RPC functions needed to maintain
-// a Chord cluster.
+// Chord is the service for chord communication
 service Chord {
-    // FindSuccessor finds the node the succedes ID. May initiate RPC calls to
-    // other nodes.
+    // FindSuccessor returns successor node of ID. Could initiate other RPC calls.
     rpc FindSuccessor(ID) returns (Node);
 
-    // ClosestPrecedingNode returns the entry of the finger table that
-    // precedes ID but is closest to it.
+    // FindSuccessor returns closest node of ID in the finger table.
     rpc FindClosestPrecedingNode(ID) returns (Node);
 
-    // GetPredecessor returns my predecessor.
+    // GetPredecessor returns current node's predecessor.
     rpc GetPredecessor(NN) returns (Node);
-    // GetSuccessor returns my successor.
+
+    // GetSuccessor returns current node's successor.
     rpc GetSuccessor(NN) returns (Node);
-    // SetPredecessor sets predecessor for a node.
-    rpc SetPredecessor(Node) returns (NN);
-    // SetPredecessor sets successor for a node.
-    rpc SetSuccessor(Node) returns (NN);
 
     // Notify notifies Chord that Node thinks it is our predecessor. This has
     // the potential to initiate the transferring of keys.
