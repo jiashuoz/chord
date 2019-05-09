@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package kvrpc;
 
-// ChordKV is the service for chord communication
-service ChordKV {
+// KV is the service for chord communication
+service KV {
     // FindSuccessor returns successor node of ID. Could initiate other RPC calls.
     rpc Get(GetRequest) returns (GetReply);
 

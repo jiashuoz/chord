@@ -270,7 +270,7 @@ func init() {
 func init() { proto.RegisterFile("kv.proto", fileDescriptor_2216fe83c9c12408) }
 
 var fileDescriptor_2216fe83c9c12408 = []byte{
-	// 205 bytes of a gzipped FileDescriptorProto
+	// 199 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xc8, 0x2e, 0xd3, 0x2b,
 	0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0xcd, 0x2e, 0x2b, 0x2a, 0x48, 0x56, 0x92, 0xe3, 0xe2, 0x72,
 	0x4f, 0x2d, 0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x12, 0xe0, 0x62, 0xce, 0x4e, 0xad,
@@ -278,12 +278,12 @@ var fileDescriptor_2216fe83c9c12408 = []byte{
 	0x39, 0x95, 0x20, 0xd9, 0xb2, 0xc4, 0x1c, 0x98, 0x6c, 0x59, 0x62, 0x8e, 0x92, 0x01, 0x17, 0x57,
 	0x40, 0x29, 0x6e, 0xdd, 0x30, 0x1d, 0x4c, 0x08, 0x1d, 0x5c, 0x5c, 0x1c, 0x60, 0x1d, 0x05, 0x39,
 	0x95, 0x4a, 0x8a, 0x5c, 0xbc, 0x2e, 0xa9, 0x39, 0xa9, 0x25, 0xa9, 0xb8, 0xad, 0x97, 0xe7, 0xe2,
-	0x86, 0x29, 0x41, 0x72, 0x01, 0xc2, 0x3c, 0xa3, 0xc9, 0x8c, 0x5c, 0xec, 0xce, 0x19, 0xf9, 0x45,
-	0x29, 0xde, 0x61, 0x42, 0x9a, 0x5c, 0xcc, 0xee, 0xa9, 0x25, 0x42, 0x82, 0x7a, 0x60, 0xaf, 0xe9,
-	0x21, 0xfc, 0x25, 0xc5, 0x8f, 0x2c, 0x04, 0x32, 0x48, 0x93, 0x8b, 0x39, 0xa0, 0x14, 0xa1, 0x14,
-	0xe1, 0x09, 0xb8, 0x52, 0x98, 0x2b, 0x85, 0x8c, 0xb8, 0xd8, 0x20, 0x4e, 0x10, 0x12, 0x81, 0x4a,
-	0xa1, 0x38, 0x5a, 0x4a, 0x08, 0x4d, 0xb4, 0x20, 0xa7, 0x32, 0x89, 0x0d, 0x1c, 0xc6, 0xc6, 0x80,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0x0d, 0x0b, 0x41, 0xba, 0x6f, 0x01, 0x00, 0x00,
+	0x86, 0x29, 0x41, 0x72, 0x01, 0xc2, 0x3c, 0xa3, 0x3e, 0x46, 0x2e, 0x26, 0xef, 0x30, 0x21, 0x4d,
+	0x2e, 0x66, 0xf7, 0xd4, 0x12, 0x21, 0x41, 0x3d, 0xb0, 0xaf, 0xf4, 0x10, 0x5e, 0x92, 0xe2, 0x47,
+	0x16, 0x02, 0x99, 0xa1, 0xc9, 0xc5, 0x1c, 0x50, 0x8a, 0x50, 0x8a, 0x70, 0x3f, 0x5c, 0x29, 0xcc,
+	0x81, 0x42, 0x46, 0x5c, 0x6c, 0x10, 0xdb, 0x85, 0x44, 0xa0, 0x52, 0x28, 0xee, 0x95, 0x12, 0x42,
+	0x13, 0x2d, 0xc8, 0xa9, 0x4c, 0x62, 0x03, 0x07, 0xaf, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xfb,
+	0x3c, 0xeb, 0xa5, 0x6a, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -294,10 +294,10 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// ChordKVClient is the client API for ChordKV service.
+// KVClient is the client API for KV service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ChordKVClient interface {
+type KVClient interface {
 	// FindSuccessor returns successor node of ID. Could initiate other RPC calls.
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetReply, error)
 	// FindSuccessor returns closest node of ID in the finger table.
@@ -306,43 +306,43 @@ type ChordKVClient interface {
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteReply, error)
 }
 
-type chordKVClient struct {
+type kVClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewChordKVClient(cc *grpc.ClientConn) ChordKVClient {
-	return &chordKVClient{cc}
+func NewKVClient(cc *grpc.ClientConn) KVClient {
+	return &kVClient{cc}
 }
 
-func (c *chordKVClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetReply, error) {
+func (c *kVClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetReply, error) {
 	out := new(GetReply)
-	err := c.cc.Invoke(ctx, "/kvrpc.ChordKV/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/kvrpc.KV/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *chordKVClient) Put(ctx context.Context, in *PutRequest, opts ...grpc.CallOption) (*PutReply, error) {
+func (c *kVClient) Put(ctx context.Context, in *PutRequest, opts ...grpc.CallOption) (*PutReply, error) {
 	out := new(PutReply)
-	err := c.cc.Invoke(ctx, "/kvrpc.ChordKV/Put", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/kvrpc.KV/Put", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *chordKVClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteReply, error) {
+func (c *kVClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteReply, error) {
 	out := new(DeleteReply)
-	err := c.cc.Invoke(ctx, "/kvrpc.ChordKV/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/kvrpc.KV/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ChordKVServer is the server API for ChordKV service.
-type ChordKVServer interface {
+// KVServer is the server API for KV service.
+type KVServer interface {
 	// FindSuccessor returns successor node of ID. Could initiate other RPC calls.
 	Get(context.Context, *GetRequest) (*GetReply, error)
 	// FindSuccessor returns closest node of ID in the finger table.
@@ -351,93 +351,93 @@ type ChordKVServer interface {
 	Delete(context.Context, *DeleteRequest) (*DeleteReply, error)
 }
 
-// UnimplementedChordKVServer can be embedded to have forward compatible implementations.
-type UnimplementedChordKVServer struct {
+// UnimplementedKVServer can be embedded to have forward compatible implementations.
+type UnimplementedKVServer struct {
 }
 
-func (*UnimplementedChordKVServer) Get(ctx context.Context, req *GetRequest) (*GetReply, error) {
+func (*UnimplementedKVServer) Get(ctx context.Context, req *GetRequest) (*GetReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (*UnimplementedChordKVServer) Put(ctx context.Context, req *PutRequest) (*PutReply, error) {
+func (*UnimplementedKVServer) Put(ctx context.Context, req *PutRequest) (*PutReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Put not implemented")
 }
-func (*UnimplementedChordKVServer) Delete(ctx context.Context, req *DeleteRequest) (*DeleteReply, error) {
+func (*UnimplementedKVServer) Delete(ctx context.Context, req *DeleteRequest) (*DeleteReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 
-func RegisterChordKVServer(s *grpc.Server, srv ChordKVServer) {
-	s.RegisterService(&_ChordKV_serviceDesc, srv)
+func RegisterKVServer(s *grpc.Server, srv KVServer) {
+	s.RegisterService(&_KV_serviceDesc, srv)
 }
 
-func _ChordKV_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _KV_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChordKVServer).Get(ctx, in)
+		return srv.(KVServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kvrpc.ChordKV/Get",
+		FullMethod: "/kvrpc.KV/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChordKVServer).Get(ctx, req.(*GetRequest))
+		return srv.(KVServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChordKV_Put_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _KV_Put_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PutRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChordKVServer).Put(ctx, in)
+		return srv.(KVServer).Put(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kvrpc.ChordKV/Put",
+		FullMethod: "/kvrpc.KV/Put",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChordKVServer).Put(ctx, req.(*PutRequest))
+		return srv.(KVServer).Put(ctx, req.(*PutRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChordKV_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _KV_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChordKVServer).Delete(ctx, in)
+		return srv.(KVServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kvrpc.ChordKV/Delete",
+		FullMethod: "/kvrpc.KV/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChordKVServer).Delete(ctx, req.(*DeleteRequest))
+		return srv.(KVServer).Delete(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _ChordKV_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "kvrpc.ChordKV",
-	HandlerType: (*ChordKVServer)(nil),
+var _KV_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "kvrpc.KV",
+	HandlerType: (*KVServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Get",
-			Handler:    _ChordKV_Get_Handler,
+			Handler:    _KV_Get_Handler,
 		},
 		{
 			MethodName: "Put",
-			Handler:    _ChordKV_Put_Handler,
+			Handler:    _KV_Put_Handler,
 		},
 		{
 			MethodName: "Delete",
-			Handler:    _ChordKV_Delete_Handler,
+			Handler:    _KV_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
