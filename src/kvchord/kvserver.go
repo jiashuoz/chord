@@ -18,6 +18,9 @@ type KVServer struct {
 	storageRWMu sync.RWMutex
 
 	grpcServer *grpc.Server
+
+	rpcConnWrappers     map[string]*rpcConnWrapper // reuse existing conn to other servers
+	rpcConnWrappersRWMu sync.RWMutex
 }
 
 func (kv *KVServer) getVal(key string) string {
@@ -103,7 +106,7 @@ func StartKVServer(ip string, joinNodeIP string) *KVServer {
 
 func (kv *KVServer) String() string {
 	str := fmt.Sprintf("KVServer:\n")
-	str += fmt.Sprintf("id: %v\nip: %v\n", kv.chord.Ip, kv.chord.Id)
+	str += fmt.Sprintf("id: %s\nip: %s\n", kv.chord.Id, kv.chord.Id)
 	str += fmt.Sprintf("number of keys: %v", kv.keyCount())
 	return str
 }

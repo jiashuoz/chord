@@ -8,10 +8,10 @@ import (
 	"time"
 )
 
-// rpcConnWrapper contains grpc.ClientConn and kvrpc.KVClient
+// rpcConnWrapper contains grpc.ClientConn and chordrpc.ChordClient
 type rpcConnWrapper struct {
-	conn        *grpc.ClientConn
-	chordClient kvrpc.KVClient
+	conn     *grpc.ClientConn
+	kvClient kvrpc.KVClient
 }
 
 // Dial wraps around grpc Dial
@@ -24,7 +24,22 @@ func Dial(ip string) (*grpc.ClientConn, error) {
 	)
 }
 
+func (kv *KVServer) getRPCConn(ip string) kvrpc.KVClient {
+	kv.rpcConnWrappersRWMu.RLock()
+	rpcConn, ok := kv.rpcConnWrappers[ip]
+	kv.rpcConnWrappersRWMu.RUnlock()
+	if ok {
+		return rpcConn.kvClient
+	}
+	return nil
+}
+
 func (kv *KVServer) connectRemote(ip string) (kvrpc.KVClient, error) {
+	kvClient := kv.getRPCConn(ip)
+
+	if kvClient != nil {
+		return kvClient, nil
+	}
 
 	conn, err := Dial(ip)
 	if err != nil {
@@ -32,8 +47,8 @@ func (kv *KVServer) connectRemote(ip string) (kvrpc.KVClient, error) {
 		return nil, err
 	}
 
-	chordClient := kvrpc.NewKVClient(conn)
-	return chordClient, nil
+	kvClient = kvrpc.NewKVClient(conn)
+	return kvClient, nil
 }
 
 // Get returns a value

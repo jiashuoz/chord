@@ -22,14 +22,22 @@ func Dial(ip string) (*grpc.ClientConn, error) {
 	)
 }
 
-func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordClient, error) {
-	ip := remote.Ip
+func (chord *ChordServer) getRPCConn(ip string) chordrpc.ChordClient {
 	chord.rpcConnWrappersRWMu.RLock()
 	rpcConn, ok := chord.rpcConnWrappers[ip]
 	chord.rpcConnWrappersRWMu.RUnlock()
-
 	if ok {
-		return rpcConn.chordClient, nil
+		return rpcConn.chordClient
+	}
+	return nil
+}
+
+func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordClient, error) {
+	ip := remote.Ip
+	chordClient := chord.getRPCConn(ip)
+
+	if chordClient != nil {
+		return chordClient, nil
 	}
 
 	conn, err := Dial(ip)
@@ -38,11 +46,11 @@ func (chord *ChordServer) connectRemote(remote *chordrpc.Node) (chordrpc.ChordCl
 		return nil, err
 	}
 
-	chordClient := chordrpc.NewChordClient(conn)
+	chordClient = chordrpc.NewChordClient(conn)
 
-	rpcConn = &rpcConnWrapper{conn, chordClient}
+	newRPCConn := &rpcConnWrapper{conn, chordClient}
 	chord.rpcConnWrappersRWMu.Lock()
-	chord.rpcConnWrappers[ip] = rpcConn
+	chord.rpcConnWrappers[ip] = newRPCConn
 	chord.rpcConnWrappersRWMu.Unlock()
 	return chordClient, nil
 }
