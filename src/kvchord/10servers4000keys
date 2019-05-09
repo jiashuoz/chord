@@ -1,0 +1,17 @@
+Launching 10 servers, loading 4000 keys
+finished launching servers
+finished putting keys
+printing results...
+number of keys: 510
+number of keys: 1229
+number of keys: 191
+number of keys: 1366
+number of keys: 240
+number of keys: 31
+number of keys: 54
+number of keys: 36
+number of keys: 199
+number of keys: 144
+total key: 4000
+PASS
+ok  	kvchord	42.018s

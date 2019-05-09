@@ -1,0 +1,5 @@
+Launching 20 servers, loading 5000 keys
+finished launching servers
+2019/05/09 14:09:45 connectRemoteconnection error: desc = "transport: error while dialing: dial tcp 127.0.0.1:13635: connect: connection refused"
+exit status 1
+FAIL	kvchord	34.788s
