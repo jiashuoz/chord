@@ -1,7 +1,6 @@
 package chord
 
 import (
-	"crypto/sha1"
 	"errors"
 	"fmt"
 	"github.com/jiashuoz/chord/chordrpc"
@@ -44,7 +43,7 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 		Node: new(chordrpc.Node),
 	}
 	chord.Ip = ip
-	chord.Id = hash(ip)
+	chord.Id = Hash(ip)
 	chord.fingerTable = make([]*chordrpc.Node, numBits)
 	chord.stopChan = make(chan struct{})
 	chord.rpcConnWrappers = make(map[string]*rpcConnWrapper)
@@ -58,7 +57,6 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 
 	chord.grpcServer = grpc.NewServer()
 	chordrpc.RegisterChordServer(chord.grpcServer, chord)
-	// gmajpb.RegisterGMajServer(node.grpcs, node)
 
 	go chord.grpcServer.Serve(listener)
 
@@ -99,6 +97,18 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 	return chord, nil
 }
 
+// Lookup takes in a key, returns the ip address of the node that should store that kv pair
+// return err is failure
+func (chord *ChordServer) Lookup(key string) (string, error) {
+	keyHased := Hash(key)
+	succ, err := chord.findSuccessor(keyHased) // check where this key should go in the ring
+	if err != nil {                            // if failure, notify the application level
+		return "", err
+	}
+	return succ.Ip, nil
+}
+
+// Stop gracefully stops the chord instance
 func (chord *ChordServer) Stop(params ...string) {
 	fmt.Printf("%v is stopping....\n", chord.Id)
 	for _, stopMsg := range params {
@@ -198,6 +208,7 @@ func (chord *ChordServer) fingerStart(i int) []byte {
 	return start.Bytes()
 }
 
+// return the successor of id
 func (chord *ChordServer) findSuccessor(id []byte) (*chordrpc.Node, error) {
 	pred, err := chord.findPredecessor(id)
 	if err != nil {
@@ -212,6 +223,7 @@ func (chord *ChordServer) findSuccessor(id []byte) (*chordrpc.Node, error) {
 	return succ, nil
 }
 
+// return the predecessor of id, this could launch RPC calls to other node
 func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 	closest := chord.findClosestPrecedingNode(id)
 	if idsEqual(closest.Id, chord.Id) {
@@ -237,6 +249,7 @@ func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 	return closest, nil
 }
 
+// returns the closest finger based on fingerTable, doesn't do RPC call
 func (chord *ChordServer) findClosestPrecedingNode(id []byte) *chordrpc.Node {
 	chord.fingerTableRWMu.RLock()
 	defer chord.fingerTableRWMu.RUnlock()
@@ -262,22 +275,7 @@ func (chord *ChordServer) getPredecessor() *chordrpc.Node {
 	return chord.predecessor
 }
 
-func hash(ipAddr string) []byte {
-	h := sha1.New()
-	h.Write([]byte(ipAddr))
-
-	idInt := big.NewInt(0)
-	idInt.SetBytes(h.Sum(nil)) // Sum() returns []byte, convert it into BigInt
-
-	maxVal := big.NewInt(0)
-	maxVal.Exp(big.NewInt(2), big.NewInt(numBits), nil) // calculate 2^m
-	idInt.Mod(idInt, maxVal)                            // mod id to make it to be [0, 2^m - 1]
-	if idInt.Cmp(big.NewInt(0)) == 0 {
-		return []byte{0}
-	}
-	return idInt.Bytes()
-}
-
+// Returns the state of chord server, uses lock, for debugging
 func (chord *ChordServer) String() string {
 	chord.fingerTableRWMu.RLock()
 	chord.predecessorRWMu.RLock()
@@ -308,4 +306,13 @@ func (chord *ChordServer) String() string {
 		str += fmt.Sprintf("%v", chord.predecessor.Id)
 	}
 	return str
+}
+
+// MakeJoinNode is mostly used for application level, takes the ip of JoinNode and make a node around it
+func MakeJoinNode(ip string) *chordrpc.Node {
+	if ip == "" {
+		return nil
+	}
+
+	return &chordrpc.Node{Id: Hash(ip), Ip: ip}
 }

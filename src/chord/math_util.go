@@ -95,7 +95,7 @@ func reverseHash(exp int, ipAddr string, startPortNum int) []string {
 	ips := make([]string, numNodes)
 	for i := 0; i < numNodes; startPortNum++ {
 		testAddr := fmt.Sprintf("%s:%d", ipAddr, startPortNum)
-		hashResult := hash(testAddr)
+		hashResult := Hash(testAddr)
 		if idsEqual(intToByteArray(i), hashResult) {
 			ips[i] = testAddr
 			i++
