@@ -2,6 +2,7 @@ package kvchord
 
 import (
 	"chord"
+	"fmt"
 	"github.com/jiashuoz/chord/kvrpc"
 	"google.golang.org/grpc"
 	"log"
@@ -82,14 +83,33 @@ func StartKVServer(ip string, joinNodeIP string) *KVServer {
 
 	kv := new(KVServer)
 	kv.storage = make(map[string]string)
-	var err error
-	kv.chord, err = chord.MakeChord(ip, chord.MakeJoinNode(joinNodeIP))
-
 	kv.grpcServer = grpc.NewServer()
+
 	kvrpc.RegisterKVServer(kv.grpcServer, kv)
+
+	var err error
+	kv.chord, err = chord.MakeChord(ip, chord.MakeJoinNode(joinNodeIP), kv.grpcServer)
+
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	return kv
+}
+
+func (kv *KVServer) String() string {
+	str := fmt.Sprintf("KVServer:\n")
+	str += fmt.Sprintf("id: %v\nip: %v\n", kv.chord.Ip, kv.chord.Id)
+	str += fmt.Sprintf("number of keys: %v", kv.keyCount())
+	return str
+}
+
+func (kv *KVServer) keyCount() int {
+	kv.storageRWMu.RLock()
+	defer kv.storageRWMu.RUnlock()
+	return len(kv.storage)
 }

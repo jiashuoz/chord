@@ -14,7 +14,7 @@ import (
 
 const stabilizeTime = 50 * time.Millisecond
 const fixFingerTime = 50 * time.Millisecond
-const numBits = 4
+const numBits = 160
 const numBits4 = 4
 const r = 4
 
@@ -38,7 +38,7 @@ type ChordServer struct {
 	rpcConnWrappersRWMu sync.RWMutex
 }
 
-func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
+func MakeChord(ip string, joinNode *chordrpc.Node, grpcs *grpc.Server) (*ChordServer, error) {
 	chord := &ChordServer{
 		Node: new(chordrpc.Node),
 	}
@@ -55,7 +55,7 @@ func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 		return nil, err
 	}
 
-	chord.grpcServer = grpc.NewServer()
+	chord.grpcServer = grpcs
 	chordrpc.RegisterChordServer(chord.grpcServer, chord)
 
 	go chord.grpcServer.Serve(listener)
