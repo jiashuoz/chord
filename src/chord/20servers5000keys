@@ -1,0 +1,27 @@
+Launching 20 servers, loading 5000 keys
+finished launching servers
+finished putting keys
+printing results...
+number of keys: 117
+number of keys: 340
+number of keys: 76
+number of keys: 457
+number of keys: 98
+number of keys: 27
+number of keys: 694
+number of keys: 266
+number of keys: 253
+number of keys: 594
+number of keys: 523
+number of keys: 120
+number of keys: 125
+number of keys: 30
+number of keys: 93
+number of keys: 358
+number of keys: 330
+number of keys: 34
+number of keys: 318
+number of keys: 147
+total key: 5000
+PASS
+ok  	chord	31.883s
