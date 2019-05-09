@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package kvrpc;
+
+// ChordKV is the service for chord communication
+service ChordKV {
+    // FindSuccessor returns successor node of ID. Could initiate other RPC calls.
+    rpc Get(GetRequest) returns (GetReply);
+
+    // FindSuccessor returns closest node of ID in the finger table.
+    rpc Put(PutRequest) returns (PutReply);
+
+    // GetSuccessor returns current node's successor.
+    rpc Delete(DeleteRequest) returns (DeleteReply);
+}
+
+message GetRequest {
+    string key = 1;
+}
+
+message GetReply {
+    string val = 1;
+}
+
+message PutRequest {
+    string key = 1;
+    string val = 2;
+}
+
+message PutReply {
+}
+
+message DeleteRequest {
+    string key = 1;
+}
+
+message DeleteReply {
+    string val = 2;
+}
