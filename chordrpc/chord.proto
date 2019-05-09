@@ -18,6 +18,13 @@ service Chord {
 
     // Notify notifies Chord that Node might be the predecessor.
     rpc Notify(Node) returns (NN);
+
+    // For KVStore
+    rpc Get(GetRequest) returns (GetReply);
+
+    rpc Put(PutRequest) returns (PutReply);
+
+    rpc Delete(DeleteRequest) returns (DeleteReply);
 }
 
 // Node contains a node ID and ip address.
@@ -31,4 +38,29 @@ message NN {} // Empty message
 // ID contains a node ID
 message ID {
     bytes id = 1;
+}
+
+// For KV store
+message GetRequest {
+    string key = 1;
+}
+
+message GetReply {
+    string val = 1;
+}
+
+message PutRequest {
+    string key = 1;
+    string val = 2;
+}
+
+message PutReply {
+}
+
+message DeleteRequest {
+    string key = 1;
+}
+
+message DeleteReply {
+    string val = 2;
 }
