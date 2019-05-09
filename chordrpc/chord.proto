@@ -16,8 +16,7 @@ service Chord {
     // GetSuccessor returns current node's successor.
     rpc GetSuccessor(NN) returns (Node);
 
-    // Notify notifies Chord that Node thinks it is our predecessor. This has
-    // the potential to initiate the transferring of keys.
+    // Notify notifies Chord that Node might be the predecessor.
     rpc Notify(Node) returns (NN);
 }
 
