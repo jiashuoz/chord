@@ -128,10 +128,10 @@ func (chord *ChordServer) Stop(params ...string) {
 	// Stop all goroutines
 	close(chord.stopChan)
 
-	// for _, rpcChordClient := range chord.chordClients {
-	// 	err := rpcChordClient.cc.Close()
-	// 	checkError("Stop", err)
-	// }
+	for _, rpcChordClient := range chord.connectionsPool {
+		err := rpcChordClient.conn.Close()
+		checkErrorGrace("Stop", err)
+	}
 }
 
 func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
