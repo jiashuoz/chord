@@ -70,3 +70,18 @@ func (chord *ChordServer) SetSuccessor(ctx context.Context, succ *chordrpc.Node)
 
 	return &chordrpc.NN{}, nil
 }
+
+func (chord *ChordServer) Get(ctx context.Context, args *chordrpc.GetRequest) (*chordrpc.GetReply, error) {
+	val, err := chord.getVal(args.Key)
+	return &chordrpc.GetReply{Val: val}, err
+}
+
+func (chord *ChordServer) Put(ctx context.Context, args *chordrpc.PutRequest) (*chordrpc.PutReply, error) {
+	chord.putVal(args.Key, args.Val)
+	return &chordrpc.PutReply{}, nil
+}
+
+func (chord *ChordServer) Delete(ctx context.Context, args *chordrpc.DeleteRequest) (*chordrpc.DeleteReply, error) {
+	val := chord.deleteVal(args.Key)
+	return &chordrpc.DeleteReply{Val: val}, nil
+}

@@ -4,6 +4,9 @@ import (
 	"crypto/sha1"
 	"log"
 	"math/big"
+	"math/rand"
+	"strconv"
+	"time"
 )
 
 // import "fmt"
@@ -23,7 +26,7 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 // checkError checks err, prints err, aborts the program
 func checkError(source string, err error) {
 	if err != nil {
-		log.Fatal(source, ": ", err)
+		log.Fatal(source+": ", err)
 	}
 }
 
@@ -48,4 +51,25 @@ func Hash(ipAddr string) []byte {
 		return []byte{0}
 	}
 	return idInt.Bytes()
+}
+
+func ipGenerator(ip string, amount int) []string {
+	s1 := rand.NewSource(time.Now().UnixNano())
+	r1 := rand.New(s1)
+
+	uniqueAddr := make(map[string]bool)
+
+	addrs := make([]string, amount)
+
+	for i := 0; i < amount; {
+		ip := ip + ":" + strconv.Itoa(r1.Intn(10000)+10000)
+		_, ok := uniqueAddr[ip]
+		if !ok {
+			uniqueAddr[ip] = true
+			addrs[i] = ip
+			i++
+		}
+	}
+
+	return addrs
 }

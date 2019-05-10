@@ -6,16 +6,16 @@ import (
 	"github.com/jiashuoz/chord/chordrpc"
 	"google.golang.org/grpc"
 	"math/big"
-	"math/rand"
 	"net"
+	"strings"
 	"sync"
 	"time"
 )
 
 const stabilizeTime = 50 * time.Millisecond
 const fixFingerTime = 50 * time.Millisecond
+const maxIdleTime = 20 * time.Second
 const numBits = 160
-const numBits4 = 4
 const r = 4
 
 type ChordServer struct {
@@ -30,15 +30,20 @@ type ChordServer struct {
 	successorList     []*chordrpc.Node // keep track of log(n) nearest successor for recovery
 	successorListRWMu sync.RWMutex
 
-	grpcServer *grpc.Server
-
 	stopChan chan struct{} // struct is the smallest thing in go, memory usage low
 
-	rpcConnWrappers     map[string]*rpcConnWrapper // reuse existing conn to other servers
-	rpcConnWrappersRWMu sync.RWMutex
+	kvStore     *kvStore
+	kvStoreRWMu sync.RWMutex
+
+	grpcServer          *grpc.Server         // this provides services
+	connectionsPool     map[string]*grpcConn // this takes care of all connections
+	connectionsPoolRWMu sync.RWMutex
+
+	tracer     Tracer
+	tracerRWMu sync.RWMutex
 }
 
-func MakeChord(ip string, joinNode *chordrpc.Node, grpcs *grpc.Server) (*ChordServer, error) {
+func MakeChord(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
 	chord := &ChordServer{
 		Node: new(chordrpc.Node),
 	}
@@ -46,8 +51,10 @@ func MakeChord(ip string, joinNode *chordrpc.Node, grpcs *grpc.Server) (*ChordSe
 	chord.Id = Hash(ip)
 	chord.fingerTable = make([]*chordrpc.Node, numBits)
 	chord.stopChan = make(chan struct{})
-	chord.rpcConnWrappers = make(map[string]*rpcConnWrapper)
-	chord.successorList = make([]*chordrpc.Node, numBits)
+	chord.connectionsPool = make(map[string]*grpcConn)
+	chord.kvStore = NewKVStore()
+
+	chord.tracer = MakeTracer()
 
 	listener, err := net.Listen("tcp", ip)
 	if err != nil {
@@ -55,10 +62,12 @@ func MakeChord(ip string, joinNode *chordrpc.Node, grpcs *grpc.Server) (*ChordSe
 		return nil, err
 	}
 
-	chord.grpcServer = grpcs
+	chord.grpcServer = grpc.NewServer()
+
 	chordrpc.RegisterChordServer(chord.grpcServer, chord)
 
 	go chord.grpcServer.Serve(listener)
+	// go chord.startCleanupConn()
 
 	err = chord.join(joinNode)
 	if err != nil {
@@ -71,7 +80,7 @@ func MakeChord(ip string, joinNode *chordrpc.Node, grpcs *grpc.Server) (*ChordSe
 		for {
 			select {
 			case <-ticker.C:
-				go chord.stabilize()
+				chord.stabilize()
 			case <-chord.stopChan:
 				ticker.Stop()
 				DPrintf("%v Stopping stabilize", chord.Id)
@@ -82,10 +91,11 @@ func MakeChord(ip string, joinNode *chordrpc.Node, grpcs *grpc.Server) (*ChordSe
 
 	go func() {
 		ticker := time.NewTicker(fixFingerTime)
+		i := 0
 		for {
 			select {
 			case <-ticker.C:
-				go chord.fixFingers()
+				i = chord.fixFingers(i)
 			case <-chord.stopChan:
 				ticker.Stop()
 				DPrintf("%v Stopping fixFingers", chord.Id)
@@ -97,12 +107,13 @@ func MakeChord(ip string, joinNode *chordrpc.Node, grpcs *grpc.Server) (*ChordSe
 	return chord, nil
 }
 
-// Lookup takes in a key, returns the ip address of the node that should store that kv pair
+// Lookup takes in a key, returns the ip address of the node that should store that chord pair
 // return err is failure
 func (chord *ChordServer) Lookup(key string) (string, error) {
 	keyHased := Hash(key)
 	succ, err := chord.findSuccessor(keyHased) // check where this key should go in the ring
-	if err != nil {                            // if failure, notify the application level
+	checkErrorGrace("Lookup", err)
+	if err != nil { // if failure, notify the application level
 		return "", err
 	}
 	return succ.Ip, nil
@@ -117,21 +128,24 @@ func (chord *ChordServer) Stop(params ...string) {
 	// Stop all goroutines
 	close(chord.stopChan)
 
-	for _, rpcConnWrapper := range chord.rpcConnWrappers {
-		err := rpcConnWrapper.conn.Close()
-		checkError("Stop", err)
-	}
+	// for _, rpcChordClient := range chord.chordClients {
+	// 	err := rpcChordClient.cc.Close()
+	// 	checkError("Stop", err)
+	// }
 }
 
 func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
 	chord.predecessor = nil
 	if joinNode == nil { // only node in the ring
 		chord.fingerTable[0] = chord.Node
-		chord.successorList[0] = chord.Node
+		// chord.successorList[0] = chord.Node
 		// chord.predecessor = chord.Node
 		return nil
 	}
 	succ, err := chord.findSuccessorRPC(joinNode, chord.Id)
+	if err != nil {
+		return err
+	}
 	if idsEqual(succ.Id, chord.Id) {
 		chord.Stop("Node with same ID already exists in the ring")
 		return errors.New("Node with same ID already exists in the ring")
@@ -181,18 +195,19 @@ func (chord *ChordServer) notify(potentialPred *chordrpc.Node) error {
 }
 
 // periodically refresh finger table entries
-func (chord *ChordServer) fixFingers() {
-	i := rand.Intn(numBits-1) + 1
+func (chord *ChordServer) fixFingers(i int) int {
+	i = (i + 1) % numBits
 	fingerStart := chord.fingerStart(i)
 	finger, err := chord.findSuccessor(fingerStart)
 	// Either RPC fails or something fails...
 	if err != nil {
 		DPrintf("fixFingers %v", err)
-		return
+		return 0
 	}
 	chord.fingerTableRWMu.Lock()
 	chord.fingerTable[i] = finger
 	chord.fingerTableRWMu.Unlock()
+	return i
 }
 
 // helper function used by fixFingers
@@ -210,12 +225,34 @@ func (chord *ChordServer) fingerStart(i int) []byte {
 
 // return the successor of id
 func (chord *ChordServer) findSuccessor(id []byte) (*chordrpc.Node, error) {
+	chord.tracerRWMu.Lock()
+	chord.tracer.startTracer(chord.Id, id)
 	pred, err := chord.findPredecessor(id)
+	checkErrorGrace("findSuccessor", err)
 	if err != nil {
 		return nil, err
 	}
 
 	succ, err := chord.getSuccessorRPC(pred)
+	checkErrorGrace("findSuccessor", err)
+	if err != nil {
+		return nil, err
+	}
+
+	chord.tracer.endTracer(succ.Id)
+	chord.tracerRWMu.Unlock()
+	return succ, nil
+}
+
+func (chord *ChordServer) findSuccessorForFinger(id []byte) (*chordrpc.Node, error) {
+	pred, err := chord.findPredecessorForFinger(id)
+	checkErrorGrace("findSuccessorForFinger", err)
+	if err != nil {
+		return nil, err
+	}
+
+	succ, err := chord.getSuccessorRPC(pred)
+	checkErrorGrace("findSuccessorForFinger", err)
 	if err != nil {
 		return nil, err
 	}
@@ -231,7 +268,13 @@ func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 	}
 
 	// Get closest's successor
-	closestSucc, _ := chord.getSuccessorRPC(closest)
+	closestSucc, err := chord.getSuccessorRPC(closest)
+	if err != nil {
+		return nil, err
+	}
+	checkErrorGrace("findPredecessor", err)
+
+	// chord.tracer.traceNode(closest.Id)
 
 	for !betweenRightInclusive(id, closest.Id, closestSucc.Id) {
 		var err error
@@ -241,6 +284,39 @@ func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 		}
 
 		closestSucc, err = chord.getSuccessorRPC(closest) // get closest's successor
+		checkErrorGrace("findPredecessor", err)
+		if err != nil {
+			return nil, err
+		}
+
+		chord.tracer.traceNode(closest.Id)
+	}
+
+	return closest, nil
+}
+
+func (chord *ChordServer) findPredecessorForFinger(id []byte) (*chordrpc.Node, error) {
+	closest := chord.findClosestPrecedingNode(id)
+	if idsEqual(closest.Id, chord.Id) {
+		return closest, nil
+	}
+
+	// Get closest's successor
+	closestSucc, err := chord.getSuccessorRPC(closest)
+	if err != nil {
+		return nil, err
+	}
+	checkErrorGrace("findPredecessorForFinger", err)
+
+	for !betweenRightInclusive(id, closest.Id, closestSucc.Id) {
+		var err error
+		closest, err = chord.findClosestPrecedingNodeRPC(closest, id)
+		if err != nil {
+			return nil, err
+		}
+
+		closestSucc, err = chord.getSuccessorRPC(closest) // get closest's successor
+		checkErrorGrace("findPredecessor", err)
 		if err != nil {
 			return nil, err
 		}
@@ -315,4 +391,85 @@ func MakeJoinNode(ip string) *chordrpc.Node {
 	}
 
 	return &chordrpc.Node{Id: Hash(ip), Ip: ip}
+}
+
+// KVStore
+// ************************************************************************
+// ************************************************************************
+
+func (chord *ChordServer) get(key string) (string, error) {
+	ip, err := chord.Lookup(key) // ip of the node to store key
+	checkError("get", err)
+	if strings.Compare(ip, chord.Ip) == 0 {
+		return chord.getVal(key)
+	}
+	val, err := chord.getRPC(ip, key)
+	checkError("get", err)
+	if err != nil {
+		return "", err
+	}
+	return val, nil
+}
+
+func (chord *ChordServer) put(key string, val string) error {
+	ip, err := chord.Lookup(key) // ip of the node to store key
+	checkError("put", err)
+	if strings.Compare(ip, chord.Ip) == 0 {
+		chord.putVal(key, val)
+		return nil
+	}
+	err = chord.putRPC(ip, key, val)
+	checkError("put", err)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (chord *ChordServer) delete(key string) (string, error) {
+	ip, err := chord.Lookup(key)
+	checkError("delete", err)
+	if strings.Compare(ip, chord.Ip) == 0 {
+		val := chord.deleteVal(key)
+		return val, nil
+	}
+	val, err := chord.deleteRPC(ip, key)
+	checkError("delete", err)
+	if err != nil {
+		return "", err
+	}
+	return val, nil
+}
+
+func (chord *ChordServer) getVal(key string) (string, error) {
+	chord.kvStoreRWMu.RLock()
+	defer chord.kvStoreRWMu.RLock()
+	val, ok := chord.kvStore.Get(key)
+	if ok != nil {
+		return "", ok
+	}
+	return val, nil
+}
+
+func (chord *ChordServer) putVal(key string, val string) {
+	chord.kvStoreRWMu.Lock()
+	defer chord.kvStoreRWMu.Unlock()
+	chord.kvStore.Put(key, val)
+}
+
+func (chord *ChordServer) deleteVal(key string) string {
+	chord.kvStoreRWMu.Lock()
+	defer chord.kvStoreRWMu.Unlock()
+	val, ok := chord.kvStore.Get(key)
+	if ok != nil {
+		return ""
+	}
+	chord.kvStore.Delete(key)
+	return val
+}
+
+func (chord *ChordServer) keyCount() int {
+	chord.kvStoreRWMu.RLock()
+	defer chord.kvStoreRWMu.RUnlock()
+	return chord.kvStore.KeyCount()
 }

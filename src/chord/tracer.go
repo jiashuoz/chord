@@ -18,13 +18,13 @@ type Tracer struct {
 
 func MakeTracer() Tracer {
 	tracer := Tracer{}
-	tracer.numHops = 0
+	tracer.numHops = 1
 	return tracer
 }
 
 //reset tracer
 func (tracer *Tracer) resetTracer() {
-	tracer.numHops = 0
+	tracer.numHops = 1
 	tracer.hops = ""
 }
 
@@ -64,6 +64,7 @@ func (tracer *Tracer) writeTrace() {
 	currentTrace := fmt.Sprintf("%s\n%s\n%s\n%s\n%s\n%s\n", keyLookup, startNodeID, hopTrace, resultNodeID, numHops, latency)
 	tracer.traces = append(tracer.traces, currentTrace)
 }
+
 func (tracer *Tracer) String() string {
 	traces := ""
 	for i := 0; i < len(tracer.traces); i++ {
@@ -71,4 +72,15 @@ func (tracer *Tracer) String() string {
 	}
 
 	return traces
+}
+
+func (tracer *Tracer) Hops() string {
+	return fmt.Sprintf("hops: %d", tracer.numHops)
+}
+
+func (tracer *Tracer) Latency() string {
+	nano := tracer.tracerDuration / time.Nanosecond
+	mili := float64(nano)
+	mili = mili / 1000000
+	return fmt.Sprintf("latency: %v", mili)
 }
