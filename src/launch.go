@@ -1,6 +1,7 @@
-package chord
+package main
 
 import (
+	"chord"
 	"github.com/jiashuoz/chord/chordrpc"
 	"log"
 	"os"
@@ -8,9 +9,9 @@ import (
 	"time"
 )
 
-func createNode(ip string, joinNode *chordrpc.Node) (*ChordServer, error) {
+func createNode(ip string, joinNode *chordrpc.Node) (*chord.ChordServer, error) {
 
-	n, err := MakeChord(ip, joinNode)
+	n, err := chord.MakeChord(ip, joinNode)
 	return n, err
 }
 
