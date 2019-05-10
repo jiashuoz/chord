@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"github.com/jiashuoz/chord/chordrpc"
 	"os"
+	"strconv"
 	"testing"
 	"time"
 )
 
 func TestConcurrentJoin2(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 2")
-	testAddrs := reverseHash(numBits4, "127.0.0.1", 5000)
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
 
 	chord0, _ := MakeChord(testAddrs[0], nil)
 
@@ -30,6 +31,10 @@ func TestConcurrentJoin2(t *testing.T) {
 	go launchChord(14, chord0.Node)
 
 	time.Sleep(5 * time.Second)
+
+	for index := 0; index < 1000; index++ {
+		fmt.Println(chord0.Lookup(strconv.Itoa(index)))
+	}
 
 	fmt.Println(chord0.String())
 
