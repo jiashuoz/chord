@@ -76,17 +76,18 @@ func MakeChord(config *Config, ip string, joinNode string) (*ChordServer, error)
 
 	chordrpc.RegisterChordServer(chord.grpcServer, chord)
 
-	// info := benchmark.ServerInfo{Type: "protobuf", Listener: l}
-
-	// benchmark.StartServer(info)
-	go chord.grpcServer.Serve(l)
-
 	err = chord.join(&chordrpc.Node{Ip: joinNode})
 
 	if err != nil {
 		chord.logger.Println(err)
 		return nil, err
 	}
+
+	// info := benchmark.ServerInfo{Type: "protobuf", Listener: l}
+
+	// benchmark.StartServer(info)
+
+	go chord.grpcServer.Serve(l)
 
 	go func() {
 		ticker := time.NewTicker(chord.config.stabilizeTime)
