@@ -1,0 +1,224 @@
+logger: 18:07:15 chord.go:70: listen tcp 127.0.0.1:33930: bind: address already in use
+logger: 18:07:19 chord.go:70: listen tcp 127.0.0.1:37156: bind: address already in use
+logger: 18:07:20 chord.go:70: listen tcp 127.0.0.1:38248: bind: address already in use
+logger: 18:07:23 chord.go:70: listen tcp 127.0.0.1:40000: bind: address already in use
+logger: 18:07:24 chord.go:70: listen tcp 127.0.0.1:41384: bind: address already in use
+logger: 18:07:24 chord.go:70: listen tcp 127.0.0.1:41480: bind: address already in use
+logger: 18:07:24 chord.go:70: listen tcp 127.0.0.1:41830: bind: address already in use
+logger: 18:07:24 chord.go:70: listen tcp 127.0.0.1:42024: bind: address already in use
+logger: 18:07:29 chord.go:70: listen tcp 127.0.0.1:44700: bind: address already in use
+logger: 18:07:29 chord.go:70: listen tcp 127.0.0.1:44706: bind: address already in use
+id: [0] ip: 127.0.0.1:5048
+Finger table:
+ith | start | successor
+0   | 1     | [1]
+1   | 2     | [2]
+2   | 4     | [4]
+3   | 8     | [8]
+4   | 16     | [16]
+5   | 32     | [32]
+6   | 64     | [64]
+7   | 128     | [128]
+Predecessor: [159]
+hops: 4 latency: 185.089209
+hops: 5 latency: 246.425859
+hops: 6 latency: 304.780551
+hops: 6 latency: 305.843208
+hops: 4 latency: 183.106462
+hops: 5 latency: 245.656497
+hops: 4 latency: 182.927556
+hops: 6 latency: 307.38434
+hops: 3 latency: 123.547653
+hops: 6 latency: 305.995421
+hops: 5 latency: 244.258306
+hops: 4 latency: 184.469175
+hops: 5 latency: 248.909429
+hops: 5 latency: 242.915217
+hops: 4 latency: 183.572673
+hops: 5 latency: 246.705376
+hops: 4 latency: 187.720242
+hops: 5 latency: 243.899123
+hops: 4 latency: 187.510176
+hops: 5 latency: 246.05789
+hops: 4 latency: 183.628755
+hops: 5 latency: 242.687657
+hops: 5 latency: 245.423754
+hops: 5 latency: 246.681175
+hops: 5 latency: 244.356826
+hops: 7 latency: 370.487837
+hops: 2 latency: 60.698256
+hops: 5 latency: 244.092726
+hops: 5 latency: 242.391353
+hops: 5 latency: 247.220248
+hops: 4 latency: 185.564805
+hops: 5 latency: 245.439673
+hops: 6 latency: 309.007025
+hops: 4 latency: 182.515108
+hops: 4 latency: 182.335971
+hops: 6 latency: 307.60869
+hops: 5 latency: 244.2874
+hops: 5 latency: 244.837218
+hops: 5 latency: 248.016821
+hops: 6 latency: 877.955379
+hops: 5 latency: 255.222181
+hops: 5 latency: 248.996606
+hops: 5 latency: 245.316799
+hops: 5 latency: 244.473367
+hops: 4 latency: 185.042381
+hops: 5 latency: 245.437788
+hops: 5 latency: 243.038012
+hops: 5 latency: 245.316442
+hops: 5 latency: 246.592009
+hops: 3 latency: 121.553659
+hops: 5 latency: 243.683317
+hops: 4 latency: 184.386719
+hops: 3 latency: 122.141441
+hops: 2 latency: 60.704359
+hops: 5 latency: 243.646709
+hops: 6 latency: 304.880674
+hops: 4 latency: 183.612402
+hops: 7 latency: 366.729811
+hops: 5 latency: 245.371028
+hops: 3 latency: 122.470771
+hops: 5 latency: 243.22483
+hops: 5 latency: 247.263588
+hops: 4 latency: 182.322988
+hops: 5 latency: 247.547789
+hops: 5 latency: 245.568057
+hops: 5 latency: 242.967434
+hops: 4 latency: 183.235094
+hops: 5 latency: 243.563829
+hops: 5 latency: 244.378865
+hops: 6 latency: 306.575486
+hops: 6 latency: 306.553297
+hops: 4 latency: 182.616913
+hops: 4 latency: 182.534591
+hops: 5 latency: 247.516086
+hops: 5 latency: 244.205491
+hops: 4 latency: 181.95206
+hops: 5 latency: 246.294352
+hops: 4 latency: 182.597381
+hops: 5 latency: 245.404882
+hops: 5 latency: 243.298474
+hops: 4 latency: 188.617094
+hops: 5 latency: 245.216843
+hops: 5 latency: 243.126608
+hops: 5 latency: 245.614892
+hops: 6 latency: 304.381069
+hops: 4 latency: 183.628209
+hops: 5 latency: 244.820755
+hops: 5 latency: 245.046591
+hops: 5 latency: 243.92042
+hops: 5 latency: 246.547092
+hops: 5 latency: 244.606061
+hops: 3 latency: 121.893716
+hops: 7 latency: 371.166901
+hops: 5 latency: 245.387701
+hops: 5 latency: 243.144082
+hops: 5 latency: 245.436423
+hops: 5 latency: 243.947891
+hops: 5 latency: 244.458936
+hops: 5 latency: 243.469457
+hops: 5 latency: 246.386867
+hops: 5 latency: 243.81218
+hops: 5 latency: 244.7691
+hops: 6 latency: 306.750704
+hops: 5 latency: 244.523832
+hops: 5 latency: 244.129195
+hops: 5 latency: 242.432054
+hops: 4 latency: 186.30764
+hops: 5 latency: 244.697187
+hops: 4 latency: 183.336259
+hops: 4 latency: 181.667599
+hops: 5 latency: 245.203242
+hops: 5 latency: 244.814699
+hops: 5 latency: 244.21965
+hops: 5 latency: 248.089454
+hops: 2 latency: 62.208429
+hops: 5 latency: 243.416312
+hops: 5 latency: 244.187145
+hops: 5 latency: 244.745648
+hops: 5 latency: 245.520189
+hops: 4 latency: 182.610974
+hops: 3 latency: 122.266215
+hops: 5 latency: 243.158578
+hops: 4 latency: 184.083177
+hops: 4 latency: 735.260224
+hops: 5 latency: 268.436374
+hops: 6 latency: 315.110169
+hops: 3 latency: 121.30182
+hops: 7 latency: 369.306833
+hops: 5 latency: 244.150202
+hops: 4 latency: 185.456985
+hops: 5 latency: 245.303348
+hops: 7 latency: 366.006648
+hops: 2 latency: 61.366764
+hops: 5 latency: 245.464096
+hops: 3 latency: 121.891293
+hops: 5 latency: 244.198409
+hops: 5 latency: 247.693953
+hops: 6 latency: 305.141851
+hops: 3 latency: 121.910116
+hops: 6 latency: 309.827641
+hops: 5 latency: 243.538653
+hops: 4 latency: 182.729982
+hops: 5 latency: 245.229458
+hops: 6 latency: 305.845003
+hops: 6 latency: 311.588514
+hops: 6 latency: 309.526113
+hops: 5 latency: 243.368778
+hops: 5 latency: 243.604294
+hops: 5 latency: 244.500269
+hops: 4 latency: 182.684374
+hops: 5 latency: 244.214347
+hops: 5 latency: 243.451155
+hops: 6 latency: 305.523953
+hops: 5 latency: 245.179591
+hops: 5 latency: 244.11768
+hops: 4 latency: 184.30007
+hops: 5 latency: 244.398657
+hops: 5 latency: 243.781728
+hops: 5 latency: 244.575008
+hops: 5 latency: 245.267198
+hops: 5 latency: 244.154314
+hops: 5 latency: 246.493223
+hops: 5 latency: 244.209241
+hops: 5 latency: 244.559701
+hops: 7 latency: 366.686998
+hops: 4 latency: 183.687828
+hops: 5 latency: 244.802023
+hops: 5 latency: 243.327551
+hops: 6 latency: 305.373323
+hops: 6 latency: 305.007104
+hops: 5 latency: 244.832509
+hops: 4 latency: 183.992135
+hops: 5 latency: 242.291764
+hops: 5 latency: 248.086473
+hops: 5 latency: 244.165415
+hops: 4 latency: 181.928143
+hops: 5 latency: 245.206305
+hops: 4 latency: 182.507576
+hops: 6 latency: 305.451519
+hops: 4 latency: 181.662954
+hops: 4 latency: 184.485748
+hops: 3 latency: 122.544708
+hops: 5 latency: 242.621328
+hops: 7 latency: 370.23802
+hops: 4 latency: 183.911669
+hops: 2 latency: 60.899534
+hops: 6 latency: 305.579882
+hops: 4 latency: 184.32444
+hops: 6 latency: 305.083091
+hops: 6 latency: 307.157302
+hops: 5 latency: 249.182291
+hops: 4 latency: 184.114603
+hops: 6 latency: 307.021108
+hops: 4 latency: 182.569117
+hops: 5 latency: 242.415123
+hops: 5 latency: 244.321895
+hops: 7 latency: 368.354295
+hops: 5 latency: 244.104747
+hops: 4 latency: 183.527582
+hops: 5 latency: 243.867916
+PASS
+ok  	_/home/ubuntu/chord/src/chord	94.660s

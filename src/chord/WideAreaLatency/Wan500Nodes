@@ -1,0 +1,603 @@
+ubuntu@ip-172-31-45-119:~/chord/src/chord$ go test -run TestLatency500Nodes
+logger: 18:09:09 chord.go:70: listen tcp 127.0.0.1:34664: bind: address already in use
+logger: 18:09:12 chord.go:70: listen tcp 127.0.0.1:41560: bind: address already in use
+logger: 18:09:13 chord.go:70: listen tcp 127.0.0.1:43252: bind: address already in use
+logger: 18:09:17 chord.go:70: listen tcp 127.0.0.1:48820: bind: address already in use
+logger: 18:09:17 chord.go:70: listen tcp 127.0.0.1:48860: bind: address already in use
+logger: 18:09:22 chord.go:70: listen tcp 127.0.0.1:57088: bind: address already in use
+logger: 18:09:23 chord.go:70: listen tcp 127.0.0.1:59464: bind: address already in use
+logger: 18:09:28 chord.go:70: listen tcp: address 65873: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 66225: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 66530: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 67214: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 67619: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 67739: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 68511: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 68804: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 69108: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 69754: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 70888: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 71160: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 71232: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 71246: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 72037: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 72815: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 72834: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 73708: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 75973: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 76349: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 77903: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 78157: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 80579: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 81082: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 82000: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 82074: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 82304: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 82309: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 82354: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 83172: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 83628: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 83636: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 84508: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 85823: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 86201: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 86347: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 87646: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 87908: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 88543: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 88745: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 89469: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 89932: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 90100: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 91501: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 91625: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 93313: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 93554: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 93856: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 93971: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 95091: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 95588: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 95840: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 96202: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 96279: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 97463: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 97508: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 97924: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 98294: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 98549: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 98976: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 99897: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 100176: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 101213: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 101783: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 103654: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 103909: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 103923: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 104228: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 104822: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 106437: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 107150: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 107504: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 107662: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 107909: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 108073: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 108116: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 109611: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 110601: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 111493: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 112219: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 112402: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 112427: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 112525: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 112714: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 112815: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 113299: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 113616: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 113731: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 114656: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 114730: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 114786: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 114920: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 115770: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 117131: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 117663: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 118148: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 118403: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 118429: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 119220: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 119584: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 120607: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 121750: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 121846: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 121886: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 122084: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 122393: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 122574: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 123959: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 124155: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 124661: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 125168: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 125555: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 125932: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 126395: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 126543: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 126595: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 127176: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 127683: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 128129: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 129175: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 129357: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 129537: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 129990: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 130150: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 130735: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 131220: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 131670: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 132174: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 132350: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 132398: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 133721: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 134924: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 135384: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 136058: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 136498: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 136937: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 137263: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 137874: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 138649: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 138772: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 138851: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 138863: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 140305: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 142517: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 143424: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 143672: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 145249: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 145250: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 145258: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 146943: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 147075: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 147131: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 148873: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 150027: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 150741: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 151002: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 152118: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 152480: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 152520: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 152780: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 153058: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 153822: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 153826: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 154259: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 154611: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 154911: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 154927: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 155719: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 156035: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 156186: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 156996: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 159452: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 159926: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 160251: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 161444: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 161941: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 163735: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 164705: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 165539: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 167098: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 167126: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 167481: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 168348: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 169733: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 170010: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 170189: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 170280: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 170507: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 171129: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 171201: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 171872: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 173050: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 174131: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 174900: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 175176: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 175470: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 176235: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 176341: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 176417: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 176595: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 177180: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 177430: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 177582: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 177933: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 178499: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 178599: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 178660: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 179116: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 179867: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 180680: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 180735: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 181146: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 181420: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 182266: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 182587: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 182901: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 182933: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 182960: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 183530: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 183956: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 184006: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 185000: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 185752: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 185969: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 186136: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 186162: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 187642: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 188073: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 188107: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 188403: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 188412: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 188682: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 189365: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 189464: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 191191: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 192487: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 192759: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 192868: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 193243: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 193735: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 194211: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 195425: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 196385: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 196464: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 197413: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 197982: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 198289: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 198413: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 198684: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 199208: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 199325: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 199539: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 199833: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 200440: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 201097: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 201817: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 202141: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 202432: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 202507: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 203201: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 203317: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 203804: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 204640: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 205465: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 205647: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 205743: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 205995: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 206548: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 206813: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 207160: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 207499: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 207597: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 208229: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 209347: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 209484: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 209510: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 209723: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 210457: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 211079: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 211407: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 211694: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 212184: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 212561: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 213005: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 213813: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 214227: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 216421: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 216600: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 216898: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 217059: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 217074: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 217491: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 218258: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 218414: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 219278: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 219972: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 220244: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 221526: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 221574: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 222257: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 222314: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 222646: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 223242: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 223513: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 223787: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 223897: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 224023: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 224053: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 225283: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 225585: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 226386: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 226412: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 226541: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 226565: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 227552: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 228219: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 229216: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 229224: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 229485: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 229516: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 229854: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 229887: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 230995: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 231481: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 232771: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 233165: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 233668: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 233695: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 235231: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 235330: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 235509: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 235578: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 236025: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 236215: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 236449: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 236640: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 237104: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 237337: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 237688: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 238430: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 239187: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 240010: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 240066: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 241788: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 242025: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 242754: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 243507: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 244705: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 245053: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 245697: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 246123: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 246296: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 246558: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 246892: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 247060: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 247924: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 249132: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 249391: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 249657: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 251225: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 251958: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 252616: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 252700: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 253076: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 253339: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 253828: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 253966: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 254808: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 255939: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 255991: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 256225: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 256414: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 257026: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 257361: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 257499: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 258247: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 258641: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 260186: invalid port
+logger: 18:09:28 chord.go:70: listen tcp: address 260967: invalid port
+successfully launched 113 servers
+id: [0] ip: 127.0.0.1:1095
+Finger table:
+ith | start | successor
+0   | 1     | [1]
+1   | 2     | [2]
+2   | 4     | [4]
+3   | 8     | [8]
+4   | 16     | [16]
+5   | 32     | [32]
+6   | 64     | [64]
+7   | 128     | [0]
+8   | 256     | [0]
+Predecessor: [120]
+hops: 5 latency: 242.997534
+hops: 5 latency: 242.46101
+hops: 5 latency: 242.487749
+hops: 5 latency: 244.040179
+hops: 5 latency: 242.53513
+hops: 4 latency: 186.344463
+hops: 5 latency: 243.302937
+hops: 4 latency: 182.247537
+hops: 5 latency: 242.27374
+hops: 5 latency: 242.528467
+hops: 4 latency: 183.576611
+hops: 5 latency: 243.525369
+hops: 5 latency: 245.553941
+hops: 5 latency: 243.166771
+hops: 6 latency: 302.734868
+hops: 2 latency: 60.566061
+hops: 5 latency: 243.893436
+hops: 5 latency: 242.148252
+hops: 2 latency: 60.741485
+hops: 5 latency: 243.134241
+hops: 5 latency: 242.326014
+hops: 5 latency: 242.108269
+hops: 5 latency: 242.262582
+hops: 5 latency: 243.195853
+hops: 6 latency: 303.850049
+hops: 5 latency: 244.404433
+hops: 5 latency: 242.141987
+hops: 5 latency: 241.891114
+hops: 5 latency: 242.510172
+hops: 5 latency: 242.718759
+hops: 5 latency: 243.379975
+hops: 3 latency: 121.218665
+hops: 5 latency: 242.436782
+hops: 5 latency: 243.035963
+hops: 5 latency: 242.379357
+hops: 5 latency: 242.260714
+hops: 4 latency: 182.728547
+hops: 5 latency: 242.944299
+hops: 5 latency: 241.983165
+hops: 5 latency: 242.937158
+hops: 5 latency: 242.77092
+hops: 5 latency: 242.73715
+hops: 5 latency: 242.490916
+hops: 5 latency: 243.445398
+hops: 5 latency: 244.645556
+hops: 5 latency: 242.80802
+hops: 5 latency: 243.23943
+hops: 5 latency: 243.25583
+hops: 5 latency: 243.803473
+hops: 5 latency: 244.696862
+hops: 5 latency: 243.30724
+hops: 5 latency: 243.407571
+hops: 5 latency: 242.041848
+hops: 5 latency: 243.205626
+hops: 4 latency: 181.470413
+hops: 5 latency: 242.171299
+hops: 5 latency: 242.117217
+hops: 5 latency: 243.41055
+hops: 3 latency: 121.181551
+hops: 5 latency: 242.468723
+hops: 5 latency: 242.468715
+hops: 5 latency: 243.343654
+hops: 3 latency: 122.606029
+hops: 5 latency: 242.84429
+hops: 5 latency: 565.702148
+hops: 5 latency: 261.39269
+hops: 5 latency: 244.683652
+hops: 5 latency: 245.131192
+hops: 5 latency: 243.884214
+hops: 5 latency: 242.467719
+hops: 5 latency: 242.948198
+hops: 5 latency: 242.661101
+hops: 5 latency: 242.090437
+hops: 5 latency: 241.898946
+hops: 5 latency: 244.715857
+hops: 5 latency: 242.761481
+hops: 5 latency: 242.319239
+hops: 5 latency: 241.920274
+hops: 5 latency: 242.37621
+hops: 5 latency: 242.617764
+hops: 5 latency: 243.472116
+hops: 5 latency: 243.132874
+hops: 5 latency: 242.737225
+hops: 5 latency: 243.548974
+hops: 5 latency: 243.319659
+hops: 5 latency: 243.433879
+hops: 6 latency: 305.231986
+hops: 5 latency: 242.252961
+hops: 5 latency: 241.907773
+hops: 5 latency: 242.82231
+hops: 5 latency: 243.816936
+hops: 6 latency: 304.696198
+hops: 5 latency: 243.203531
+hops: 5 latency: 244.650469
+hops: 5 latency: 243.049886
+hops: 3 latency: 121.149244
+hops: 5 latency: 242.232136
+hops: 5 latency: 242.316957
+hops: 5 latency: 242.369159
+hops: 5 latency: 244.549238
+hops: 5 latency: 244.511669
+hops: 5 latency: 243.262008
+hops: 5 latency: 243.138565
+hops: 5 latency: 242.621291
+hops: 5 latency: 242.792225
+hops: 5 latency: 242.61143
+hops: 5 latency: 243.036081
+hops: 5 latency: 244.620976
+hops: 5 latency: 243.423246
+hops: 5 latency: 243.025628
+hops: 3 latency: 121.182796
+hops: 5 latency: 243.436745
+hops: 5 latency: 241.980232
+hops: 5 latency: 242.332448
+hops: 5 latency: 242.173656
+hops: 5 latency: 245.270476
+hops: 5 latency: 243.483433
+hops: 5 latency: 242.011509
+hops: 5 latency: 242.534542
+hops: 5 latency: 242.52961
+hops: 5 latency: 242.202242
+hops: 5 latency: 243.604374
+hops: 5 latency: 242.494828
+hops: 5 latency: 242.416248
+hops: 5 latency: 242.062396
+hops: 5 latency: 244.35903
+hops: 5 latency: 242.195499
+hops: 5 latency: 242.280113
+hops: 5 latency: 243.468077
+hops: 5 latency: 242.658478
+hops: 5 latency: 243.514088
+hops: 5 latency: 242.094838
+hops: 5 latency: 527.291772
+hops: 5 latency: 311.252037
+hops: 5 latency: 247.388626
+hops: 5 latency: 245.529751
+hops: 5 latency: 243.113984
+hops: 5 latency: 242.760565
+hops: 5 latency: 242.083281
+hops: 5 latency: 242.57622
+hops: 5 latency: 242.389295
+hops: 3 latency: 122.538429
+hops: 5 latency: 243.478438
+hops: 5 latency: 243.044499
+hops: 5 latency: 242.641259
+hops: 5 latency: 242.066826
+hops: 5 latency: 245.996507
+hops: 5 latency: 243.120338
+hops: 5 latency: 242.181637
+hops: 4 latency: 182.414213
+hops: 5 latency: 243.236801
+hops: 7 latency: 365.028306
+hops: 5 latency: 242.453752
+hops: 5 latency: 242.079222
+hops: 5 latency: 243.058273
+hops: 5 latency: 243.454401
+hops: 5 latency: 244.530196
+hops: 3 latency: 121.164462
+hops: 5 latency: 242.259444
+hops: 6 latency: 303.115339
+hops: 5 latency: 242.155989
+hops: 5 latency: 242.738484
+hops: 5 latency: 245.61234
+hops: 5 latency: 243.971925
+hops: 3 latency: 121.184551
+hops: 5 latency: 243.220223
+hops: 5 latency: 242.468626
+hops: 5 latency: 242.268981
+hops: 5 latency: 243.877826
+hops: 5 latency: 242.222088
+hops: 5 latency: 242.324981
+hops: 5 latency: 242.717408
+hops: 4 latency: 182.977494
+hops: 5 latency: 242.503692
+hops: 5 latency: 243.316381
+hops: 5 latency: 242.383889
+hops: 5 latency: 243.50338
+hops: 5 latency: 243.187755
+hops: 5 latency: 242.430308
+hops: 5 latency: 242.688634
+hops: 4 latency: 181.796224
+hops: 5 latency: 242.838256
+hops: 5 latency: 242.900968
+hops: 5 latency: 243.038531
+hops: 5 latency: 243.969601
+hops: 5 latency: 244.486122
+hops: 5 latency: 243.009708
+hops: 4 latency: 181.568554
+hops: 5 latency: 242.522936
+hops: 5 latency: 242.163371
+hops: 5 latency: 243.387055
+hops: 6 latency: 303.715181
+hops: 5 latency: 243.241941
+hops: 5 latency: 242.621149
+hops: 3 latency: 121.386394
+hops: 5 latency: 243.074136
+hops: 5 latency: 243.71703
+hops: 4 latency: 182.335882
+hops: 5 latency: 242.780107
+hops: 5 latency: 243.929714
+PASS
+ok  	_/home/ubuntu/chord/src/chord	82.699s

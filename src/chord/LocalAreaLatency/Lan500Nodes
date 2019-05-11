@@ -1,0 +1,410 @@
+logger: 17:42:19 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:20 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:20 chord.go:70: listen tcp 127.0.0.1:36092: bind: address already in use
+logger: 17:42:20 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:20 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:20 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:20 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:23 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:23 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:23 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:24 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:25 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:25 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:26 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:26 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:28 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:28 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:30 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:30 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:31 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:32 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:33 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:34 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:34 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:34 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:35 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:36 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:36 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:36 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:38 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:38 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:38 chord.go:70: listen tcp 127.0.0.1:44690: bind: address already in use
+logger: 17:42:40 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:42 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:42 chord.go:70: listen tcp 127.0.0.1:59266: bind: address already in use
+logger: 17:42:42 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:43 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:43 chord.go:70: listen tcp 127.0.0.1:54962: bind: address already in use
+logger: 17:42:43 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:44 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:44 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:44 chord.go:70: listen tcp 127.0.0.1:58888: bind: address already in use
+logger: 17:42:44 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:45 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:46 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:46 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:46 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:47 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:47 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:48 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:48 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:48 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:48 chord.go:70: listen tcp 127.0.0.1:33046: bind: address already in use
+logger: 17:42:49 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:49 chord.go:70: listen tcp 127.0.0.1:40914: bind: address already in use
+logger: 17:42:50 chord.go:70: listen tcp 127.0.0.1:37978: bind: address already in use
+logger: 17:42:50 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:51 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:51 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:52 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:52 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:53 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:54 chord.go:70: listen tcp 127.0.0.1:54652: bind: address already in use
+logger: 17:42:54 chord.go:70: listen tcp 127.0.0.1:41548: bind: address already in use
+logger: 17:42:55 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:56 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:57 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:57 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:57 chord.go:70: listen tcp 127.0.0.1:45064: bind: address already in use
+logger: 17:42:58 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:58 chord.go:70: listen tcp 127.0.0.1:49496: bind: address already in use
+logger: 17:42:58 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:58 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:59 chord.go:82: Node with same ID already exists in the ring
+logger: 17:42:59 chord.go:70: listen tcp 127.0.0.1:58936: bind: address already in use
+logger: 17:42:59 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:00 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:00 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:01 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:02 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:02 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:03 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:03 chord.go:70: listen tcp 127.0.0.1:56920: bind: address already in use
+logger: 17:43:03 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:03 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:03 chord.go:70: listen tcp 127.0.0.1:58176: bind: address already in use
+logger: 17:43:03 chord.go:70: listen tcp 127.0.0.1:40740: bind: address already in use
+logger: 17:43:05 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:06 chord.go:70: listen tcp 127.0.0.1:33748: bind: address already in use
+logger: 17:43:07 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:07 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:08 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:10 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:13 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:14 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:14 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:14 chord.go:70: listen tcp 127.0.0.1:51204: bind: address already in use
+logger: 17:43:14 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:15 chord.go:70: listen tcp 127.0.0.1:40514: bind: address already in use
+logger: 17:43:15 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:16 chord.go:70: listen tcp 127.0.0.1:57678: bind: address already in use
+logger: 17:43:17 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:17 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:18 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:19 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:19 chord.go:70: listen tcp 127.0.0.1:53040: bind: address already in use
+logger: 17:43:20 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:20 chord.go:70: listen tcp 127.0.0.1:48600: bind: address already in use
+logger: 17:43:21 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:21 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:22 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:22 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:23 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:23 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:24 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:24 chord.go:70: listen tcp 127.0.0.1:53682: bind: address already in use
+logger: 17:43:24 chord.go:70: listen tcp 127.0.0.1:60994: bind: address already in use
+logger: 17:43:24 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:24 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:25 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:27 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:27 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:27 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:27 chord.go:70: listen tcp 127.0.0.1:50596: bind: address already in use
+logger: 17:43:28 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:28 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:29 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:30 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:30 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:31 chord.go:70: listen tcp 127.0.0.1:59192: bind: address already in use
+logger: 17:43:31 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:31 chord.go:70: listen tcp 127.0.0.1:47998: bind: address already in use
+logger: 17:43:33 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:33 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:34 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:35 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:35 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:35 chord.go:70: listen tcp 127.0.0.1:50114: bind: address already in use
+logger: 17:43:36 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:36 chord.go:70: listen tcp 127.0.0.1:37546: bind: address already in use
+logger: 17:43:36 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:36 chord.go:70: listen tcp 127.0.0.1:55526: bind: address already in use
+logger: 17:43:37 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:37 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:38 chord.go:70: listen tcp 127.0.0.1:57056: bind: address already in use
+logger: 17:43:39 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:40 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:40 chord.go:70: listen tcp 127.0.0.1:46384: bind: address already in use
+logger: 17:43:40 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:40 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:41 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:41 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:42 chord.go:70: listen tcp 127.0.0.1:50298: bind: address already in use
+logger: 17:43:43 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:44 chord.go:70: listen tcp 127.0.0.1:48810: bind: address already in use
+logger: 17:43:44 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:44 chord.go:70: listen tcp 127.0.0.1:59300: bind: address already in use
+logger: 17:43:45 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:46 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:46 chord.go:70: listen tcp 127.0.0.1:51138: bind: address already in use
+logger: 17:43:46 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:46 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:47 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:49 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:50 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:51 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:51 chord.go:70: listen tcp 127.0.0.1:47512: bind: address already in use
+logger: 17:43:51 chord.go:70: listen tcp 127.0.0.1:49100: bind: address already in use
+logger: 17:43:51 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:51 chord.go:70: listen tcp 127.0.0.1:54032: bind: address already in use
+logger: 17:43:52 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:52 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:53 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:54 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:54 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:55 chord.go:70: listen tcp 127.0.0.1:41316: bind: address already in use
+logger: 17:43:55 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:55 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:55 chord.go:70: listen tcp 127.0.0.1:33068: bind: address already in use
+logger: 17:43:55 chord.go:70: listen tcp 127.0.0.1:36960: bind: address already in use
+logger: 17:43:55 chord.go:70: listen tcp 127.0.0.1:42940: bind: address already in use
+logger: 17:43:56 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:57 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:58 chord.go:70: listen tcp 127.0.0.1:35010: bind: address already in use
+logger: 17:43:58 chord.go:70: listen tcp 127.0.0.1:36606: bind: address already in use
+logger: 17:43:58 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:58 chord.go:70: listen tcp 127.0.0.1:56200: bind: address already in use
+logger: 17:43:58 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:59 chord.go:82: Node with same ID already exists in the ring
+logger: 17:43:59 chord.go:70: listen tcp 127.0.0.1:41680: bind: address already in use
+logger: 17:44:00 chord.go:82: Node with same ID already exists in the ring
+logger: 17:44:01 chord.go:82: Node with same ID already exists in the ring
+logger: 17:44:01 chord.go:70: listen tcp 127.0.0.1:35848: bind: address already in use
+logger: 17:44:01 chord.go:82: Node with same ID already exists in the ring
+logger: 17:44:01 chord.go:82: Node with same ID already exists in the ring
+id: [1 68] ip: 127.0.0.1:51037
+Finger table:
+ith | start | successor
+0   | 325     | [1 69]
+1   | 326     | [1 70]
+2   | 328     | [1 73]
+3   | 332     | [1 78]
+4   | 340     | [1 84]
+5   | 356     | [1 100]
+6   | 388     | [1 132]
+7   | 452     | [1 196]
+8   | 68     | [68]
+Predecessor: [1 65]
+hops: 7 latency: 1651.19971
+hops: 3 latency: 180.616082
+hops: 7 latency: 538.773631
+hops: 6 latency: 418.424734
+hops: 5 latency: 351.162459
+hops: 5 latency: 381.215085
+hops: 7 latency: 551.547396
+hops: 4 latency: 276.911719
+hops: 6 latency: 447.941615
+hops: 6 latency: 469.657858
+hops: 4 latency: 312.168148
+hops: 5 latency: 347.471459
+hops: 3 latency: 179.111033
+hops: 4 latency: 289.128536
+hops: 5 latency: 363.142102
+hops: 4 latency: 270.015052
+hops: 5 latency: 369.4683
+hops: 5 latency: 344.801352
+hops: 3 latency: 159.978379
+hops: 6 latency: 463.623127
+hops: 5 latency: 325.53492
+hops: 5 latency: 354.702944
+hops: 5 latency: 339.993637
+hops: 7 latency: 502.502745
+hops: 6 latency: 418.19977
+hops: 2 latency: 75.450998
+hops: 4 latency: 259.042039
+hops: 6 latency: 428.973417
+hops: 4 latency: 252.030469
+hops: 4 latency: 281.550896
+hops: 4 latency: 263.053892
+hops: 6 latency: 439.578292
+hops: 5 latency: 351.699498
+hops: 5 latency: 339.325949
+hops: 5 latency: 342.662575
+hops: 6 latency: 417.578239
+hops: 5 latency: 355.330786
+hops: 3 latency: 170.224815
+hops: 4 latency: 223.038175
+hops: 6 latency: 431.076292
+hops: 3 latency: 164.05055
+hops: 6 latency: 435.559275
+hops: 3 latency: 182.619872
+hops: 6 latency: 450.724929
+hops: 4 latency: 278.170906
+hops: 4 latency: 278.765525
+hops: 5 latency: 336.890854
+hops: 5 latency: 314.158558
+hops: 7 latency: 522.19101
+hops: 8 latency: 631.427692
+hops: 7 latency: 581.652817
+hops: 5 latency: 488.354927
+hops: 5 latency: 455.74796
+hops: 5 latency: 407.388416
+hops: 3 latency: 278.273295
+hops: 7 latency: 641.304142
+hops: 7 latency: 632.500776
+hops: 5 latency: 343.885765
+hops: 7 latency: 494.699825
+hops: 4 latency: 254.550445
+hops: 6 latency: 1483.398869
+hops: 6 latency: 433.173695
+hops: 4 latency: 274.118331
+hops: 5 latency: 364.594446
+hops: 4 latency: 278.012928
+hops: 4 latency: 275.707798
+hops: 3 latency: 223.017053
+hops: 6 latency: 469.14815
+hops: 5 latency: 365.251847
+hops: 5 latency: 383.222088
+hops: 6 latency: 459.535355
+hops: 4 latency: 290.15
+hops: 6 latency: 445.776214
+hops: 5 latency: 397.963993
+hops: 5 latency: 321.86019
+hops: 7 latency: 506.506082
+hops: 7 latency: 521.561633
+hops: 5 latency: 357.914847
+hops: 5 latency: 331.065181
+hops: 4 latency: 244.133174
+hops: 4 latency: 252.465247
+hops: 2 latency: 99.616366
+hops: 7 latency: 575.23007
+hops: 6 latency: 476.767101
+hops: 6 latency: 467.741809
+hops: 6 latency: 430.990775
+hops: 6 latency: 406.421897
+hops: 5 latency: 364.863573
+hops: 4 latency: 263.189557
+hops: 8 latency: 628.170684
+hops: 4 latency: 287.344017
+hops: 7 latency: 550.509682
+hops: 7 latency: 492.665735
+hops: 3 latency: 162.435582
+hops: 4 latency: 246.165813
+hops: 5 latency: 327.446454
+hops: 3 latency: 171.688505
+hops: 4 latency: 291.865908
+hops: 3 latency: 201.40954
+hops: 6 latency: 441.38035
+hops: 3 latency: 149.975786
+hops: 4 latency: 274.910526
+hops: 5 latency: 341.03801
+hops: 4 latency: 283.199726
+hops: 7 latency: 510.59154
+hops: 5 latency: 326.155158
+hops: 5 latency: 357.805049
+hops: 3 latency: 166.597666
+hops: 7 latency: 504.668897
+hops: 4 latency: 263.985607
+hops: 4 latency: 245.782252
+hops: 3 latency: 188.209075
+hops: 7 latency: 536.195364
+hops: 4 latency: 256.329818
+hops: 4 latency: 255.433455
+hops: 4 latency: 246.75515
+hops: 4 latency: 252.618878
+hops: 5 latency: 334.841945
+hops: 4 latency: 278.022233
+hops: 8 latency: 629.48135
+hops: 4 latency: 675.263615
+hops: 5 latency: 884.097337
+hops: 4 latency: 252.236689
+hops: 5 latency: 369.84288
+hops: 4 latency: 279.276493
+hops: 5 latency: 336.924635
+hops: 4 latency: 243.14442
+hops: 4 latency: 254.528983
+hops: 6 latency: 416.708843
+hops: 4 latency: 285.451502
+hops: 4 latency: 261.959768
+hops: 6 latency: 462.518698
+hops: 7 latency: 520.103027
+hops: 5 latency: 325.848208
+hops: 6 latency: 440.465513
+hops: 3 latency: 200.8055
+hops: 3 latency: 160.144355
+hops: 5 latency: 327.889897
+hops: 3 latency: 153.231198
+hops: 2 latency: 85.825592
+hops: 5 latency: 353.26462
+hops: 4 latency: 247.648805
+hops: 5 latency: 373.732059
+hops: 3 latency: 182.234542
+hops: 7 latency: 520.492215
+hops: 6 latency: 449.952669
+hops: 5 latency: 342.277694
+hops: 6 latency: 438.079414
+hops: 4 latency: 287.693283
+hops: 3 latency: 144.863402
+hops: 5 latency: 349.974534
+hops: 4 latency: 253.33015
+hops: 5 latency: 342.048063
+hops: 5 latency: 355.876669
+hops: 7 latency: 509.613778
+hops: 6 latency: 427.153502
+hops: 4 latency: 264.167121
+hops: 9 latency: 706.998178
+hops: 5 latency: 364.507299
+hops: 5 latency: 335.104707
+hops: 5 latency: 332.755692
+hops: 6 latency: 413.096206
+hops: 3 latency: 170.472507
+hops: 7 latency: 519.23368
+hops: 3 latency: 174.165036
+hops: 4 latency: 253.471886
+hops: 4 latency: 278.785872
+hops: 5 latency: 345.098811
+hops: 6 latency: 419.146541
+hops: 7 latency: 522.992539
+hops: 3 latency: 174.185994
+hops: 4 latency: 255.081191
+hops: 5 latency: 357.92844
+hops: 5 latency: 351.67073
+hops: 3 latency: 152.740122
+hops: 5 latency: 320.76854
+hops: 2 latency: 81.609595
+hops: 5 latency: 358.563585
+hops: 4 latency: 269.793826
+hops: 6 latency: 461.385679
+hops: 4 latency: 264.484587
+hops: 4 latency: 246.784605
+hops: 4 latency: 254.967798
+hops: 7 latency: 483.400143
+hops: 4 latency: 275.221189
+hops: 3 latency: 153.60482
+hops: 5 latency: 1328.569769
+hops: 4 latency: 253.789646
+hops: 6 latency: 474.23237
+hops: 5 latency: 379.238824
+hops: 4 latency: 272.130852
+hops: 5 latency: 365.971855
+hops: 6 latency: 446.000098
+hops: 5 latency: 363.771197
+hops: 4 latency: 272.325024
+hops: 5 latency: 360.33477
+hops: 6 latency: 451.584845
+hops: 5 latency: 358.256968
+hops: 4 latency: 270.85939
+hops: 6 latency: 439.461714
+PASS
+ok  	_/home/ubuntu/chord/src/chord	181.048s
