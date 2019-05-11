@@ -44,7 +44,7 @@ func ipGenerator(ip string, amount int) []string {
 	addrs := make([]string, amount)
 
 	for i := 0; i < amount; {
-		ip := ip + ":" + strconv.Itoa(r1.Intn(10000)+10000)
+		ip := ip + ":" + strconv.Itoa(r1.Intn(60000)+1535)
 		_, ok := uniqueAddr[ip]
 		if !ok {
 			uniqueAddr[ip] = true

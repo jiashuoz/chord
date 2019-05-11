@@ -101,6 +101,10 @@ func reverseHash(exp int, ipAddr string, startPortNum int) []string {
 			ips[i] = testAddr
 			i++
 		}
+		if startPortNum > 65535 {
+			fmt.Println("startPort out of boundary")
+			break
+		}
 	}
 	return ips
 }

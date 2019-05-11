@@ -11,16 +11,17 @@ func TestLan500Nodes(t *testing.T) {
 	ringsize := 512
 	defaultConfig.ringSize = 9
 	numOfNodes := 500
-	jump := int(ringsize / numOfNodes)
+	// jump := int(ringsize / numOfNodes)
 	numOfLookup := 200
 
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 	chords := make([]*ChordServer, ringsize)
-	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000) // ip addresses in order
-	chords[0], _ = MakeChord(defaultConfig, testAddrs[0], "")
+	// testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 1024) // ip addresses in order
+	randAddrs := ipGenerator("127.0.0.1", 500)
+	chords[0], _ = MakeChord(defaultConfig, randAddrs[0], "")
 	for index := 1; index < numOfNodes; index++ {
-		chords[index*jump], _ = MakeChord(defaultConfig, testAddrs[index*jump], testAddrs[0])
+		chords[index], _ = MakeChord(defaultConfig, randAddrs[index], randAddrs[0])
 	}
 
 	time.Sleep(5 * time.Second) // let it stabilize
