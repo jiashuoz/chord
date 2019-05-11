@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/jiashuoz/chord/chordrpc"
 	"google.golang.org/grpc"
+	// "google.golang.org/grpc/benchmark"
 	"time"
 )
 
@@ -16,8 +17,12 @@ type grpcConn struct {
 
 // Dial returns a grpc.ClientConn
 func Dial(ip string, options ...grpc.DialOption) (*grpc.ClientConn, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+
+	// return benchmark.NewClientConnWithContext(ctx, ip, options...), nil
+
+	// return grpc.Dial(ip, options...)
 	return grpc.DialContext(ctx,
 		ip,
 		options...,
@@ -25,7 +30,7 @@ func Dial(ip string, options ...grpc.DialOption) (*grpc.ClientConn, error) {
 }
 
 func (chord *ChordServer) connectRemote(remoteIP string) (chordrpc.ChordClient, error) {
-
+	time.Sleep(2 * time.Millisecond)
 	chord.connectionsPoolRWMu.RLock()
 	grpcc, ok := chord.connectionsPool[remoteIP]
 	if ok {

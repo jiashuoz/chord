@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/jiashuoz/chord/chordrpc"
 	"google.golang.org/grpc"
+	// "google.golang.org/grpc/benchmark"
+	"google.golang.org/grpc/benchmark/latency"
 	"log"
 	"math/big"
 	"net"
@@ -35,12 +37,14 @@ type ChordServer struct {
 	connectionsPool     map[string]*grpcConn // this takes care of all connections
 	connectionsPoolRWMu sync.RWMutex
 
-	tracer     Tracer // for testing latency and hops
+	tracer     *Tracer // for testing latency and hops
 	tracerRWMu sync.RWMutex
 
 	config *Config
 
 	logger *log.Logger
+
+	network *latency.Network
 }
 
 // MakeChord takes an ip address, the ip of an existing node, returns a new ChordServer instance
@@ -60,17 +64,22 @@ func MakeChord(config *Config, ip string, joinNode string) (*ChordServer, error)
 
 	chord.logger = log.New(os.Stderr, "logger: ", log.Ltime|log.Lshortfile) // print time and line number
 
-	listener, err := net.Listen("tcp", ip)
+	chord.network = &latency.Network{100 * 1024, 2 * time.Millisecond, 1500}
+	l, err := net.Listen("tcp", ip)
 	if err != nil {
 		chord.logger.Println(err)
 		return nil, err
 	}
+	// listener := chord.network.Listener(l) // listener with latency injected
 
 	chord.grpcServer = grpc.NewServer()
 
 	chordrpc.RegisterChordServer(chord.grpcServer, chord)
 
-	go chord.grpcServer.Serve(listener)
+	// info := benchmark.ServerInfo{Type: "protobuf", Listener: l}
+
+	// benchmark.StartServer(info)
+	go chord.grpcServer.Serve(l)
 
 	err = chord.join(&chordrpc.Node{Ip: joinNode})
 
@@ -90,7 +99,7 @@ func MakeChord(config *Config, ip string, joinNode string) (*ChordServer, error)
 				}
 			case <-chord.stopChan:
 				ticker.Stop()
-				chord.logger.Printf("%s stopping stabilize\n", chord.Ip)
+				chord.logger.Printf("%s %d stopping stabilize\n", chord.Ip, chord.Id)
 				return
 			}
 		}
@@ -108,7 +117,7 @@ func MakeChord(config *Config, ip string, joinNode string) (*ChordServer, error)
 				}
 			case <-chord.stopChan:
 				ticker.Stop()
-				chord.logger.Printf("%s stopping fixing fingers\n", chord.Ip)
+				chord.logger.Printf("%s %d stopping fixing fingers\n", chord.Ip, chord.Id)
 				return
 			}
 		}
@@ -142,6 +151,10 @@ func (chord *ChordServer) Stop() {
 			chord.logger.Println(err)
 		}
 	}
+}
+
+func (chord *ChordServer) StopFixFingers() {
+	close(chord.stopChan)
 }
 
 func (chord *ChordServer) join(joinNode *chordrpc.Node) error {
@@ -244,7 +257,7 @@ func (chord *ChordServer) findSuccessor(id []byte) (*chordrpc.Node, error) {
 		chord.logger.Println("findSuccessor: getSuccessorRPC")
 		return nil, err
 	}
-
+	chord.tracer.traceNode(succ.Id)
 	chord.tracer.endTracer(succ.Id)
 	chord.tracerRWMu.Unlock()
 	return succ, nil
@@ -264,7 +277,7 @@ func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 		return nil, err
 	}
 
-	// chord.tracer.traceNode(closest.Id)
+	chord.tracer.traceNode(closest.Id)
 
 	for !betweenRightInclusive(id, closest.Id, closestSucc.Id) {
 		var err error

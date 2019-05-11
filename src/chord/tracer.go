@@ -16,16 +16,18 @@ type Tracer struct {
 	traces         []string
 }
 
-func MakeTracer() Tracer {
+func MakeTracer() *Tracer {
 	tracer := Tracer{}
-	tracer.numHops = 1
-	return tracer
+	tracer.numHops = 0
+	return &tracer
 }
 
 //reset tracer
 func (tracer *Tracer) resetTracer() {
-	tracer.numHops = 1
+
+	tracer.numHops = 0
 	tracer.hops = ""
+	tracer.traces = nil
 }
 
 func (tracer *Tracer) startTracer(startNodeID []byte, keyID []byte) {
