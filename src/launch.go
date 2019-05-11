@@ -4,8 +4,6 @@ import (
 	"chord"
 	"fmt"
 	"log"
-	"os"
-	"os/signal"
 	"time"
 )
 
@@ -21,9 +19,5 @@ func main() {
 		time.Sleep(5 * time.Second)
 		fmt.Println(h.String())
 	}
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	<-time.After(10 * time.Second)
-	<-c
-	// h.Stop()
+
 }
