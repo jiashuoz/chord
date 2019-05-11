@@ -94,17 +94,12 @@ func intToByteArray(i int) []byte {
 func reverseHash(exp int, ipAddr string, startPortNum int) []string {
 	numNodes := int(math.Pow(2, float64(exp)))
 	ips := make([]string, numNodes)
-	uniqueAddr := make(map[int]bool)
-	port := startPortNum
-	for i := 0; i < numNodes; port++ {
-		testAddr := fmt.Sprintf("%s:%d", ipAddr, port)
+	for i := 0; i < numNodes; startPortNum++ {
+		testAddr := fmt.Sprintf("%s:%d", ipAddr, startPortNum)
 		hashResult := Hash(testAddr, exp)
-		_, ok := uniqueAddr[port]
-		if idsEqual(intToByteArray(i), hashResult) && !ok {
+		if idsEqual(intToByteArray(i), hashResult) {
 			ips[i] = testAddr
 			i++
-			uniqueAddr[port] = true
-			port = startPortNum
 		}
 	}
 	return ips
