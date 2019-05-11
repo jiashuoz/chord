@@ -141,9 +141,8 @@ func (chord *ChordServer) Lookup(key string) (string, error) {
 
 // Stop gracefully stops the chord instance
 func (chord *ChordServer) Stop() {
-	chord.logger.Printf("%s stopping instance\n", chord.Ip)
+	chord.logger.Printf("%s stopping outgoing connections\n", chord.Ip)
 	// Stop all goroutines
-	close(chord.stopChan)
 	chord.connectionsPoolRWMu.Lock()
 	defer chord.connectionsPoolRWMu.Unlock()
 	for _, connection := range chord.connectionsPool {
@@ -152,6 +151,26 @@ func (chord *ChordServer) Stop() {
 			chord.logger.Println(err)
 		}
 	}
+}
+
+// Leave makes chord leave the ring gracefully
+func (chord *ChordServer) Leave() {
+	chord.logger.Printf("%s %d leaving the ring\n", chord.Ip, chord.Id)
+	close(chord.stopChan) // stop fixFingers and stabilize
+	chord.grpcServer.GracefulStop()
+
+	succ := chord.getSuccessor()
+	pred := chord.getPredecessor()
+
+	if !idsEqual(succ.Id, chord.Id) && pred != nil {
+		kvTransfered, _ := chord.transferKeys(chord.getSuccessor(), chord.getPredecessor().Id, chord.Id)
+		chord.logger.Printf("number of transfered keys: %d\n", kvTransfered)
+
+		chord.setPredecessorRPC(chord.getSuccessor(), chord.getPredecessor())
+		chord.setSuccessorRPC(chord.getPredecessor(), chord.getSuccessor())
+	}
+
+	chord.Stop()
 }
 
 func (chord *ChordServer) StopFixFingers() {
@@ -209,10 +228,40 @@ func (chord *ChordServer) stabilize() error {
 func (chord *ChordServer) notify(potentialPred *chordrpc.Node) error {
 	chord.predecessorRWMu.Lock()
 	defer chord.predecessorRWMu.Unlock()
+	var oldPred *chordrpc.Node
 	if chord.predecessor == nil || between(potentialPred.Id, chord.predecessor.Id, chord.Id) {
+		if chord.predecessor != nil {
+			oldPred = chord.predecessor
+		}
 		chord.predecessor = potentialPred
+		if oldPred != nil {
+			if between(chord.predecessor.Id, oldPred.Id, chord.Id) {
+				chord.transferKeys(chord.predecessor, oldPred.Id, chord.predecessor.Id) // transfer our key to new predecessor
+			}
+		}
 	}
 	return nil
+}
+
+// transfer key value pairs from current node to target, (start - end], returns the number of kv transfered
+func (chord *ChordServer) transferKeys(target *chordrpc.Node, start []byte, end []byte) (int, error) {
+	chord.kvStoreRWMu.Lock()
+	defer chord.kvStoreRWMu.Unlock()
+
+	count := 0
+	for k, v := range chord.kvStore.storage {
+		hashedKey := chord.Hash(k)
+		if betweenRightInclusive(hashedKey, start, end) {
+			log.Println(k, hashedKey, start, end)
+			err := chord.putRPC(target.Ip, k, v)
+			if err != nil {
+				return count, err
+			}
+			count++
+			delete(chord.kvStore.storage, k)
+		}
+	}
+	return count, nil
 }
 
 // periodically refresh finger table entries
@@ -378,8 +427,10 @@ func (chord *ChordServer) getPredecessor() *chordrpc.Node {
 func (chord *ChordServer) String() string {
 	chord.fingerTableRWMu.RLock()
 	chord.predecessorRWMu.RLock()
+	chord.kvStoreRWMu.RLock()
 	defer chord.fingerTableRWMu.RUnlock()
 	defer chord.predecessorRWMu.RUnlock()
+	defer chord.kvStoreRWMu.RUnlock()
 	str := fmt.Sprintf("id: %v ip: %v\n", chord.Id, chord.Ip)
 
 	str += "Finger table:\n"
@@ -400,9 +451,16 @@ func (chord *ChordServer) String() string {
 
 	str += fmt.Sprintf("Predecessor: ")
 	if chord.predecessor == nil {
-		str += fmt.Sprintf("none")
+		str += fmt.Sprintf("none\n")
 	} else {
-		str += fmt.Sprintf("%v", chord.predecessor.Id)
+		str += fmt.Sprintf("%v\n", chord.predecessor.Id)
+	}
+
+	if len(chord.kvStore.storage) != 0 {
+		str += fmt.Sprintf("Key values: total %d\n", len(chord.kvStore.storage))
+		for k, v := range chord.kvStore.storage {
+			str += fmt.Sprintf("%s: %s\n", k, v)
+		}
 	}
 	return str
 }

@@ -7,9 +7,36 @@ import (
 	"time"
 )
 
+func TestTransferKey(t *testing.T) {
+	ringsize := 8
+	defaultConfig.ringSize = 3
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 1024)
+	chords := make([]*ChordServer, ringsize)
+
+	chords[0], _ = MakeChord(defaultConfig, testAddrs[0], "")
+	chords[1], _ = MakeChord(defaultConfig, testAddrs[1], testAddrs[0])
+	chords[3], _ = MakeChord(defaultConfig, testAddrs[3], testAddrs[0])
+
+	time.Sleep(2 * time.Second)
+	chords[0].put(testAddrs[5], "world")
+	chords[0].put(testAddrs[4], "world1")
+
+	time.Sleep(1 * time.Second)
+	fmt.Println(chords[0].String())
+	chords[5], _ = MakeChord(defaultConfig, testAddrs[5], testAddrs[0])
+	time.Sleep(1 * time.Second)
+	chords[5].Leave()
+	time.Sleep(1 * time.Second)
+	for _, c := range chords {
+		if c != nil {
+			fmt.Println(c.String())
+		}
+	}
+}
+
 func TestLatency500Nodes(t *testing.T) {
 	ringsize := 512
-	defaultConfig.ringSize = 9
+	defaultConfig.ringSize = 9 // this is not ringSize, this should be x, where 2^x = ringsize
 	numOfNodes := 500
 	jump := int(ringsize / numOfNodes)
 	numOfLookup := 200

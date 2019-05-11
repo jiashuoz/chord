@@ -30,7 +30,7 @@ func Dial(ip string, options ...grpc.DialOption) (*grpc.ClientConn, error) {
 }
 
 func (chord *ChordServer) connectRemote(remoteIP string) (chordrpc.ChordClient, error) {
-	time.Sleep(30 * time.Millisecond)
+	// time.Sleep(30 * time.Millisecond)
 	chord.connectionsPoolRWMu.RLock()
 	grpcc, ok := chord.connectionsPool[remoteIP]
 	if ok {
@@ -109,6 +109,25 @@ func (chord *ChordServer) getPredecessorRPC(remote *chordrpc.Node) (*chordrpc.No
 	return result, err
 }
 
+func (chord *ChordServer) setPredecessorRPC(remote *chordrpc.Node, pred *chordrpc.Node) (*chordrpc.NN, error) {
+	client, err := chord.connectRemote(remote.Ip)
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := client.SetPredecessor(context.Background(), pred)
+	return result, err
+}
+func (chord *ChordServer) setSuccessorRPC(remote *chordrpc.Node, succ *chordrpc.Node) (*chordrpc.NN, error) {
+	client, err := chord.connectRemote(remote.Ip)
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := client.SetSuccessor(context.Background(), succ)
+	return result, err
+}
+
 // Get returns a value
 func (chord *ChordServer) getRPC(remoteIP string, key string) (string, error) {
 	client, err := chord.connectRemote(remoteIP)
@@ -142,6 +161,41 @@ func (chord *ChordServer) deleteRPC(remoteIP string, key string) (string, error)
 	result, err := client.Delete(context.Background(), request)
 	return result.Val, err
 }
+
+func (chord *ChordServer) requestKeysRPC(succ *chordrpc.Node, start []byte, end []byte) ([]*chordrpc.KeyValue, error) {
+	client, err := chord.connectRemote(succ.Ip)
+	if err != nil {
+		return nil, err
+	}
+
+	request := &chordrpc.RequestKeyValueRequest{Start: start, End: end}
+	result, err := client.RequestKeys(context.Background(), request)
+	return result.KeyValues, err
+}
+
+// func (chord *ChordServer) transferKeysRPC(succ *chordrpc.Node, start []byte, end []byte) error {
+// 	client, err := chord.connectRemote(succ.Ip)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	chord.kvStoreRWMu.RLock()
+// 	kvs := make([]*chordrpc.KeyValue, 0)
+// 	for k, v := range chord.kvStore.storage {
+// 		hashedKey := chord.Hash(k)
+// 		if betweenRightInclusive(hashedKey, start, end) {
+// 			kvpair := &chordrpc.KeyValue{
+// 				Key: k,
+// 				Val: v,
+// 			}
+// 			kvs = append(kvs, kvpair)
+// 		}
+// 	}
+// 	chord.kvStoreRWMu.RUnlock()
+// 	request := &chordrpc.RequestKeyValueReply{KeyValues: kvs}
+// 	result, err := client.TransferKeys(context.Background(), request)
+// 	return err
+// }
 
 // func (chord *ChordServer) startCleanupConn() {
 // 	ticker := time.NewTicker(5 * time.Second)

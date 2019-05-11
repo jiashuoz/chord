@@ -85,3 +85,23 @@ func (chord *ChordServer) Delete(ctx context.Context, args *chordrpc.DeleteReque
 	val := chord.deleteVal(args.Key)
 	return &chordrpc.DeleteReply{Val: val}, nil
 }
+
+// RequestKeys sends back the requested keys
+func (chord *ChordServer) RequestKeys(ctx context.Context, args *chordrpc.RequestKeyValueRequest) (*chordrpc.RequestKeyValueReply, error) {
+	chord.kvStoreRWMu.Lock()
+	defer chord.kvStoreRWMu.Unlock()
+	start := args.Start
+	end := args.End
+	kvs := make([]*chordrpc.KeyValue, 0)
+	for k, v := range chord.kvStore.storage {
+		hashedKey := chord.Hash(k)
+		if betweenRightInclusive(hashedKey, start, end) {
+			kvpair := &chordrpc.KeyValue{
+				Key: k,
+				Val: v,
+			}
+			kvs = append(kvs, kvpair)
+		}
+	}
+	return &chordrpc.RequestKeyValueReply{KeyValues: kvs}, nil
+}
