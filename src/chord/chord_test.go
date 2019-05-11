@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestLan256Nodes(t *testing.T) {
+func TestLan500Nodes(t *testing.T) {
 	ringsize := 512
 	defaultConfig.ringSize = 9
 	numOfNodes := 500
