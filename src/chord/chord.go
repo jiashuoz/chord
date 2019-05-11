@@ -218,7 +218,7 @@ func (chord *ChordServer) notify(potentialPred *chordrpc.Node) error {
 func (chord *ChordServer) fixFingers(i int) (int, error) {
 	i = (i + 1) % chord.config.ringSize
 	fingerStart := chord.fingerStart(i)
-	finger, err := chord.findSuccessor(fingerStart)
+	finger, err := chord.findSuccessorForFingers(fingerStart)
 	// Either RPC fails or something fails...
 	if err != nil {
 		return 0, err
@@ -240,6 +240,54 @@ func (chord *ChordServer) fingerStart(i int) []byte {
 		return []byte{0}
 	}
 	return start.Bytes()
+}
+
+// return the successor of id
+func (chord *ChordServer) findSuccessorForFingers(id []byte) (*chordrpc.Node, error) {
+	pred, err := chord.findPredecessorForFingers(id)
+	if err != nil {
+		chord.logger.Println("findSuccessor")
+		return nil, err
+	}
+
+	succ, err := chord.getSuccessorRPC(pred)
+	if err != nil {
+		chord.logger.Println("findSuccessor: getSuccessorRPC")
+		return nil, err
+	}
+	return succ, nil
+}
+
+// return the predecessor of id, this could launch RPC calls to other node
+func (chord *ChordServer) findPredecessorForFingers(id []byte) (*chordrpc.Node, error) {
+	closest := chord.findClosestPrecedingNode(id)
+	if idsEqual(closest.Id, chord.Id) {
+		return closest, nil
+	}
+
+	// Get closest's successor
+	closestSucc, err := chord.getSuccessorRPC(closest)
+	if err != nil {
+		chord.logger.Println("findPredecessor: getSuccessorRPC")
+		return nil, err
+	}
+
+	for !betweenRightInclusive(id, closest.Id, closestSucc.Id) {
+		var err error
+		closest, err = chord.findClosestPrecedingNodeRPC(closest, id)
+		if err != nil {
+			chord.logger.Println("findPredecessor: findClosestPrecedingNodeRPC")
+			return nil, err
+		}
+
+		closestSucc, err = chord.getSuccessorRPC(closest) // get closest's successor
+		if err != nil {
+			chord.logger.Println("findPredecessor: getSuccessorRPC")
+			return nil, err
+		}
+	}
+
+	return closest, nil
 }
 
 // return the successor of id
