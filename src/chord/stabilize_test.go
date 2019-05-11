@@ -12,7 +12,7 @@ import (
 
 func TestConcurrentJoin2(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 2")
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 
 	chord0, _ := MakeChord(defaultConfig, testAddrs[0], "")
 
@@ -45,7 +45,7 @@ func TestConcurrentJoin2(t *testing.T) {
 func TestConcurrentJoin1(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 1")
 
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, _ := MakeChord(defaultConfig, testAddrs[0], "")
 	go func(index int) {
 		fmt.Printf("initializing %v\n", index)
@@ -78,7 +78,7 @@ func TestConcurrentJoin1(t *testing.T) {
 func TestConcurrentJoin0(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 0")
 
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	for index := 1; index <= 7; index++ {
 		go func(index int) {
@@ -101,7 +101,7 @@ func TestConcurrentJoin0(t *testing.T) {
 // Ring in figure 5, with 8 nodes
 func TestStabilize2(t *testing.T) {
 	fmt.Println("Test Stabilize2")
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	chord1, err := MakeChord(defaultConfig, testAddrs[1], chord0.Node.Ip)
 	chord2, err := MakeChord(defaultConfig, testAddrs[2], chord1.Node.Ip)
@@ -131,7 +131,7 @@ func TestStabilize2(t *testing.T) {
 // Figure 3 setup, don't change
 func TestStabilize0(t *testing.T) {
 	fmt.Println("Test Stabilize0, figure3")
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	checkError("TestStabilize0", err)
 	chord1, err := MakeChord(defaultConfig, testAddrs[1], chord0.Node.Ip)
@@ -150,7 +150,7 @@ func TestStabilize0(t *testing.T) {
 // Figure 5 setup in the paper, don't change
 func TestStabilize1(t *testing.T) {
 	fmt.Println("Test Stabilize1, figure5")
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	checkError("TestStabilize1", err)
 	chord1, err := MakeChord(defaultConfig, testAddrs[1], chord0.Node.Ip)
@@ -171,7 +171,7 @@ func TestStabilize1(t *testing.T) {
 
 func TestJoin(t *testing.T) {
 	fmt.Println("Test Join")
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	checkError("TestJoin", err)
 
@@ -184,7 +184,7 @@ func TestJoin(t *testing.T) {
 
 func TestMake(t *testing.T) {
 	fmt.Println("Test MakeChord")
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -218,7 +218,7 @@ func TestMake(t *testing.T) {
 }
 
 func TestFindSuccessor(t *testing.T) {
-	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 	chord0, _ := MakeChord(defaultConfig, testAddrs[0], "") // id 0
 	chord1, _ := MakeChord(defaultConfig, testAddrs[1], "") // id 1
 	chord3, _ := MakeChord(defaultConfig, testAddrs[3], "") // id 3
@@ -383,7 +383,7 @@ func TestFindSuccessor(t *testing.T) {
 }
 
 // func TestGetSuccessor(t *testing.T) {
-// 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+// 	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000)
 // 	chord0 := MakeServer(testAddrs[0]) // id 0
 // 	chord1 := MakeServer(testAddrs[1]) // id 1
 // 	server2 := MakeServer(testAddrs[2]) // id 2
