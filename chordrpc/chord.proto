@@ -16,6 +16,9 @@ service Chord {
     // GetSuccessor returns current node's successor.
     rpc GetSuccessor(NN) returns (Node);
 
+    rpc SetPredecessor(Node) returns (NN);
+    rpc SetSuccessor(Node) returns (NN);
+
     // Notify notifies Chord that Node might be the predecessor.
     rpc Notify(Node) returns (NN);
 
