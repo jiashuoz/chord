@@ -96,7 +96,7 @@ func reverseHash(exp int, ipAddr string, startPortNum int) []string {
 	ips := make([]string, numNodes)
 	for i := 0; i < numNodes; startPortNum++ {
 		testAddr := fmt.Sprintf("%s:%d", ipAddr, startPortNum)
-		hashResult := Hash(testAddr)
+		hashResult := Hash(testAddr, exp)
 		if idsEqual(intToByteArray(i), hashResult) {
 			ips[i] = testAddr
 			i++
@@ -105,7 +105,7 @@ func reverseHash(exp int, ipAddr string, startPortNum int) []string {
 	return ips
 }
 
-func Hash(ipAddr string) []byte {
+func Hash(ipAddr string, numBits int) []byte {
 	h := sha1.New()
 	h.Write([]byte(ipAddr))
 
@@ -113,8 +113,8 @@ func Hash(ipAddr string) []byte {
 	idInt.SetBytes(h.Sum(nil)) // Sum() returns []byte, convert it into BigInt
 
 	maxVal := big.NewInt(0)
-	maxVal.Exp(big.NewInt(2), big.NewInt(numBits), nil) // calculate 2^m
-	idInt.Mod(idInt, maxVal)                            // mod id to make it to be [0, 2^m - 1]
+	maxVal.Exp(big.NewInt(2), big.NewInt(int64(numBits)), nil) // calculate 2^m
+	idInt.Mod(idInt, maxVal)                                   // mod id to make it to be [0, 2^m - 1]
 	if idInt.Cmp(big.NewInt(0)) == 0 {
 		return []byte{0}
 	}

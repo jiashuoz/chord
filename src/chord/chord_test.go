@@ -6,6 +6,31 @@ import (
 	"time"
 )
 
+func TestLookupCorrectness(t *testing.T) {
+	defaultConfig.ringSize = 4
+	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
+
+	chords := make([]*ChordServer, 16)
+	chords[0], _ = MakeChord(defaultConfig, testAddrs[0], "")
+	chords[1], _ = MakeChord(defaultConfig, testAddrs[1], testAddrs[0])
+	chords[3], _ = MakeChord(defaultConfig, testAddrs[3], testAddrs[0])
+	chords[6], _ = MakeChord(defaultConfig, testAddrs[6], testAddrs[0])
+	chords[7], _ = MakeChord(defaultConfig, testAddrs[7], testAddrs[0])
+	chords[14], _ = MakeChord(defaultConfig, testAddrs[14], testAddrs[0])
+
+	time.Sleep(5 * time.Second)
+
+	for {
+		for _, c := range chords {
+			if c != nil {
+				fmt.Println(c.String())
+			}
+		}
+		time.Sleep(5 * time.Second)
+	}
+
+}
+
 // Test: node with conflicting ID is not allowed to join the ring
 func TestConflictNodeID(t *testing.T) {
 	fmt.Println("Test TestConflictNodeID")

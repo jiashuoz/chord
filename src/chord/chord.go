@@ -14,12 +14,6 @@ import (
 	"time"
 )
 
-const stabilizeTime = 50 * time.Millisecond
-const fixFingerTime = 50 * time.Millisecond
-const maxIdleTime = 20 * time.Second
-const numBits = 160
-const r = 4
-
 type ChordServer struct {
 	*chordrpc.Node // we never change this node, so no need to lock!!!
 
@@ -57,7 +51,7 @@ func MakeChord(config *Config, ip string, joinNode string) (*ChordServer, error)
 	}
 	chord.Ip = ip
 	chord.Id = chord.Hash(ip)
-	chord.fingerTable = make([]*chordrpc.Node, numBits)
+	chord.fingerTable = make([]*chordrpc.Node, chord.config.ringSize)
 	chord.stopChan = make(chan struct{})
 	chord.connectionsPool = make(map[string]*grpcConn)
 	chord.kvStore = NewKVStore()
@@ -226,7 +220,7 @@ func (chord *ChordServer) fixFingers(i int) (int, error) {
 func (chord *ChordServer) fingerStart(i int) []byte {
 	currID := new(big.Int).SetBytes(chord.Id)
 	offset := new(big.Int).Exp(big.NewInt(2), big.NewInt(int64(i)), nil)
-	maxVal := big.NewInt(0).Exp(big.NewInt(2), big.NewInt(numBits), nil)
+	maxVal := big.NewInt(0).Exp(big.NewInt(2), big.NewInt(int64(chord.config.ringSize)), nil)
 	start := new(big.Int).Add(currID, offset)
 	start.Mod(start, maxVal)
 	if len(start.Bytes()) == 0 {
@@ -296,7 +290,7 @@ func (chord *ChordServer) findPredecessor(id []byte) (*chordrpc.Node, error) {
 func (chord *ChordServer) findClosestPrecedingNode(id []byte) *chordrpc.Node {
 	chord.fingerTableRWMu.RLock()
 	defer chord.fingerTableRWMu.RUnlock()
-	for i := numBits - 1; i >= 0; i-- {
+	for i := chord.config.ringSize - 1; i >= 0; i-- {
 		if chord.fingerTable[i] != nil {
 			if between(chord.fingerTable[i].Id, chord.Id, id) {
 				return chord.fingerTable[i]
@@ -328,14 +322,14 @@ func (chord *ChordServer) String() string {
 
 	str += "Finger table:\n"
 	str += "ith | start | successor\n"
-	for i := 0; i < numBits; i++ {
+	for i := 0; i < chord.config.ringSize; i++ {
 		if chord.fingerTable[i] == nil {
 			continue
 		}
 		currID := new(big.Int).SetBytes(chord.Id)
 		offset := new(big.Int).Exp(big.NewInt(2), big.NewInt(int64(i)), nil)
 		maxVal := big.NewInt(0)
-		maxVal.Exp(big.NewInt(2), big.NewInt(numBits), nil)
+		maxVal.Exp(big.NewInt(2), big.NewInt(int64(chord.config.ringSize)), nil)
 		start := new(big.Int).Add(currID, offset)
 		start.Mod(start, maxVal)
 		successor := chord.fingerTable[i].Id
@@ -441,8 +435,8 @@ func (chord *ChordServer) Hash(ipAddr string) []byte {
 	idInt.SetBytes(h.Sum(nil)) // Sum() returns []byte, convert it into BigInt
 
 	maxVal := big.NewInt(0)
-	maxVal.Exp(big.NewInt(2), big.NewInt(numBits), nil) // calculate 2^m
-	idInt.Mod(idInt, maxVal)                            // mod id to make it to be [0, 2^m - 1]
+	maxVal.Exp(big.NewInt(2), big.NewInt(int64(chord.config.ringSize)), nil) // calculate 2^m
+	idInt.Mod(idInt, maxVal)                                                 // mod id to make it to be [0, 2^m - 1]
 	if idInt.Cmp(big.NewInt(0)) == 0 {
 		return []byte{0}
 	}
