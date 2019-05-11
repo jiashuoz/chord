@@ -25,6 +25,8 @@ service Chord {
     rpc Put(PutRequest) returns (PutReply);
 
     rpc Delete(DeleteRequest) returns (DeleteReply);
+
+    rpc RequestKeys(RequestKeyValueRequest) returns (RequestKeyValueReply);
 }
 
 // Node contains a node ID and ip address.
@@ -63,4 +65,18 @@ message DeleteRequest {
 
 message DeleteReply {
     string val = 2;
+}
+
+message RequestKeyValueRequest {
+    bytes start = 1;
+    bytes end = 2;
+}
+
+message KeyValue {
+    string key = 1;
+    string val = 2;
+}
+
+message RequestKeyValueReply {
+    repeated KeyValue keyValues = 1;
 }
