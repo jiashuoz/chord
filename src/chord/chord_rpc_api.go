@@ -30,7 +30,7 @@ func Dial(ip string, options ...grpc.DialOption) (*grpc.ClientConn, error) {
 }
 
 func (chord *ChordServer) connectRemote(remoteIP string) (chordrpc.ChordClient, error) {
-	time.Sleep(2 * time.Millisecond)
+	time.Sleep(30 * time.Millisecond)
 	chord.connectionsPoolRWMu.RLock()
 	grpcc, ok := chord.connectionsPool[remoteIP]
 	if ok {

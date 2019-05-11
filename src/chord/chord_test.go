@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestLan500Nodes(t *testing.T) {
+func TestLatency500Nodes(t *testing.T) {
 	ringsize := 512
 	defaultConfig.ringSize = 9
 	numOfNodes := 500
@@ -42,7 +42,7 @@ func TestLan500Nodes(t *testing.T) {
 	}
 }
 
-func TestLan160Nodes(t *testing.T) {
+func TestLatency160Nodes(t *testing.T) {
 	ringsize := 256
 	defaultConfig.ringSize = 8
 	numOfNodes := 160
@@ -70,7 +70,7 @@ func TestLan160Nodes(t *testing.T) {
 	}
 }
 
-func TestLan100Nodes(t *testing.T) {
+func TestLatency100Nodes(t *testing.T) {
 	ringsize := 256
 	defaultConfig.ringSize = 8
 	numOfNodes := 100
@@ -98,7 +98,7 @@ func TestLan100Nodes(t *testing.T) {
 	}
 }
 
-func TestLan80Nodes(t *testing.T) {
+func TestLatency80Nodes(t *testing.T) {
 	ringsize := 256
 	defaultConfig.ringSize = 8
 	numOfNodes := 80
@@ -126,7 +126,7 @@ func TestLan80Nodes(t *testing.T) {
 	}
 }
 
-func TestLan40Nodes(t *testing.T) {
+func TestLatency40Nodes(t *testing.T) {
 	ringsize := 256
 	defaultConfig.ringSize = 8
 	numOfNodes := 40
@@ -154,7 +154,7 @@ func TestLan40Nodes(t *testing.T) {
 	}
 }
 
-func TestLan20Nodes(t *testing.T) {
+func TestLatency20Nodes(t *testing.T) {
 	ringsize := 256
 	defaultConfig.ringSize = 8
 	numOfNodes := 20
@@ -182,7 +182,7 @@ func TestLan20Nodes(t *testing.T) {
 	}
 }
 
-func TestLan10Nodes(t *testing.T) {
+func TestLatency10Nodes(t *testing.T) {
 	ringsize := 256
 	defaultConfig.ringSize = 8 // 2^8 = 256
 	numOfNodes := 10
