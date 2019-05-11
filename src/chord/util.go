@@ -1,9 +1,7 @@
 package chord
 
 import (
-	"crypto/sha1"
 	"log"
-	"math/big"
 	"math/rand"
 	"strconv"
 	"time"
@@ -35,22 +33,6 @@ func checkErrorGrace(source string, err error) {
 	if err != nil {
 		log.Println(source, ": ", err)
 	}
-}
-
-func Hash(ipAddr string) []byte {
-	h := sha1.New()
-	h.Write([]byte(ipAddr))
-
-	idInt := big.NewInt(0)
-	idInt.SetBytes(h.Sum(nil)) // Sum() returns []byte, convert it into BigInt
-
-	maxVal := big.NewInt(0)
-	maxVal.Exp(big.NewInt(2), big.NewInt(numBits), nil) // calculate 2^m
-	idInt.Mod(idInt, maxVal)                            // mod id to make it to be [0, 2^m - 1]
-	if idInt.Cmp(big.NewInt(0)) == 0 {
-		return []byte{0}
-	}
-	return idInt.Bytes()
 }
 
 func ipGenerator(ip string, amount int) []string {

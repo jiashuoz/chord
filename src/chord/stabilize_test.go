@@ -14,10 +14,10 @@ func TestConcurrentJoin2(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 2")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
 
-	chord0, _ := MakeChord(testAddrs[0], nil)
+	chord0, _ := MakeChord(defaultConfig, testAddrs[0], "")
 
 	launchChord := func(index int, joinNode *chordrpc.Node) {
-		c, _ := MakeChord(testAddrs[index], joinNode)
+		c, _ := MakeChord(defaultConfig, testAddrs[index], joinNode.Ip)
 		fmt.Printf("initializing %v %v %v\n", index, testAddrs[index], c.Id)
 		time.Sleep(5 * time.Second)
 		fmt.Println(c.String())
@@ -46,24 +46,24 @@ func TestConcurrentJoin1(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 1")
 
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, _ := MakeChord(testAddrs[0], nil)
+	chord0, _ := MakeChord(defaultConfig, testAddrs[0], "")
 	go func(index int) {
 		fmt.Printf("initializing %v\n", index)
-		c1, _ := MakeChord(testAddrs[index], chord0.Node)
+		c1, _ := MakeChord(defaultConfig, testAddrs[index], chord0.Node.Ip)
 		time.Sleep(5 * time.Second)
 		fmt.Println(c1.String())
 	}(1)
 
 	go func(index int) {
 		fmt.Printf("initializing %v\n", index)
-		c6, _ := MakeChord(testAddrs[index], chord0.Node)
+		c6, _ := MakeChord(defaultConfig, testAddrs[index], chord0.Node.Ip)
 		time.Sleep(5 * time.Second)
 		fmt.Println(c6.String())
 	}(6)
 
 	go func(index int) {
 		fmt.Printf("initializing %v\n", index)
-		c3, _ := MakeChord(testAddrs[index], chord0.Node)
+		c3, _ := MakeChord(defaultConfig, testAddrs[index], chord0.Node.Ip)
 		time.Sleep(5 * time.Second)
 		fmt.Println(c3.String())
 	}(3)
@@ -79,10 +79,10 @@ func TestConcurrentJoin0(t *testing.T) {
 	fmt.Println("Test TestConcurrentJoin 0")
 
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
+	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	for index := 1; index <= 7; index++ {
 		go func(index int) {
-			c, _ := MakeChord(testAddrs[index], chord0.Node)
+			c, _ := MakeChord(defaultConfig, testAddrs[index], chord0.Node.Ip)
 			time.Sleep(5 * time.Second)
 			fmt.Println(c.String())
 		}(index)
@@ -102,14 +102,14 @@ func TestConcurrentJoin0(t *testing.T) {
 func TestStabilize2(t *testing.T) {
 	fmt.Println("Test Stabilize2")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
-	chord1, err := MakeChord(testAddrs[1], chord0.Node)
-	chord2, err := MakeChord(testAddrs[2], chord1.Node)
-	chord3, err := MakeChord(testAddrs[3], chord2.Node)
-	chord4, err := MakeChord(testAddrs[4], chord3.Node)
-	chord5, err := MakeChord(testAddrs[5], chord2.Node)
-	chord6, err := MakeChord(testAddrs[6], chord1.Node)
-	chord7, err := MakeChord(testAddrs[7], chord0.Node)
+	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
+	chord1, err := MakeChord(defaultConfig, testAddrs[1], chord0.Node.Ip)
+	chord2, err := MakeChord(defaultConfig, testAddrs[2], chord1.Node.Ip)
+	chord3, err := MakeChord(defaultConfig, testAddrs[3], chord2.Node.Ip)
+	chord4, err := MakeChord(defaultConfig, testAddrs[4], chord3.Node.Ip)
+	chord5, err := MakeChord(defaultConfig, testAddrs[5], chord2.Node.Ip)
+	chord6, err := MakeChord(defaultConfig, testAddrs[6], chord1.Node.Ip)
+	chord7, err := MakeChord(defaultConfig, testAddrs[7], chord0.Node.Ip)
 
 	if err != nil {
 		checkError("TestStabilize2", err)
@@ -132,11 +132,11 @@ func TestStabilize2(t *testing.T) {
 func TestStabilize0(t *testing.T) {
 	fmt.Println("Test Stabilize0, figure3")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
+	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	checkError("TestStabilize0", err)
-	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	chord1, err := MakeChord(defaultConfig, testAddrs[1], chord0.Node.Ip)
 	checkError("TestStabilize0", err)
-	chord3, err := MakeChord(testAddrs[3], chord0.Node)
+	chord3, err := MakeChord(defaultConfig, testAddrs[3], chord0.Node.Ip)
 	checkError("TestStabilize0", err)
 
 	for {
@@ -151,13 +151,13 @@ func TestStabilize0(t *testing.T) {
 func TestStabilize1(t *testing.T) {
 	fmt.Println("Test Stabilize1, figure5")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
+	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	checkError("TestStabilize1", err)
-	chord1, err := MakeChord(testAddrs[1], chord0.Node)
+	chord1, err := MakeChord(defaultConfig, testAddrs[1], chord0.Node.Ip)
 	checkError("TestStabilize1", err)
-	chord3, err := MakeChord(testAddrs[3], chord0.Node)
+	chord3, err := MakeChord(defaultConfig, testAddrs[3], chord0.Node.Ip)
 	checkError("TestStabilize1", err)
-	chord6, err := MakeChord(testAddrs[6], chord0.Node)
+	chord6, err := MakeChord(defaultConfig, testAddrs[6], chord0.Node.Ip)
 	checkError("TestStabilize1", err)
 
 	for {
@@ -172,7 +172,7 @@ func TestStabilize1(t *testing.T) {
 func TestJoin(t *testing.T) {
 	fmt.Println("Test Join")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
+	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	checkError("TestJoin", err)
 
 	for {
@@ -185,7 +185,7 @@ func TestJoin(t *testing.T) {
 func TestMake(t *testing.T) {
 	fmt.Println("Test MakeChord")
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, err := MakeChord(testAddrs[0], nil)
+	chord0, err := MakeChord(defaultConfig, testAddrs[0], "")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
@@ -219,9 +219,9 @@ func TestMake(t *testing.T) {
 
 func TestFindSuccessor(t *testing.T) {
 	testAddrs := reverseHash(numBits, "127.0.0.1", 5000)
-	chord0, _ := MakeChord(testAddrs[0], nil) // id 0
-	chord1, _ := MakeChord(testAddrs[1], nil) // id 1
-	chord3, _ := MakeChord(testAddrs[3], nil) // id 3
+	chord0, _ := MakeChord(defaultConfig, testAddrs[0], "") // id 0
+	chord1, _ := MakeChord(defaultConfig, testAddrs[1], "") // id 1
+	chord3, _ := MakeChord(defaultConfig, testAddrs[3], "") // id 3
 
 	node0 := &chordrpc.Node{Id: intToByteArray(0), Ip: testAddrs[0]}
 	node1 := &chordrpc.Node{Id: intToByteArray(1), Ip: testAddrs[1]}

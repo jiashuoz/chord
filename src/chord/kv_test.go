@@ -10,18 +10,20 @@ import (
 )
 
 func TestLookupLatency(t *testing.T) {
+
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 
 	serverCount := 3
 
-	addrs := ipGenerator("127.0.0.1", serverCount) // generates 100 unique random ip address
-	initialServer, err := MakeChord(addrs[0], nil)
-	checkErrorGrace("", err)
+	randomAddr := ipGenerator("127.0.0.1", serverCount) // generates 100 unique random ip address
+	// inorderAddr := reverseHash(config.ringSize, "127.0.0.1", 5000)
+
+	initialServer, err := MakeChord(defaultConfig, randomAddr[0], "")
 
 	servers := make([]*ChordServer, serverCount)
 	for i := 1; i < serverCount; i++ {
-		servers[i], err = MakeChord(addrs[i], initialServer.Node)
+		servers[i], err = MakeChord(defaultConfig, randomAddr[i], initialServer.Node.Ip)
 		checkErrorGrace("", err)
 	}
 
@@ -51,7 +53,7 @@ func TestKeysPerNodeAdv(t *testing.T) {
 	serverCount := 100
 
 	addrs := ipGenerator("127.0.0.1", serverCount) // generates 100 unique random ip address
-	initialServer, err := MakeChord(addrs[0], nil)
+	initialServer, err := MakeChord(defaultConfig, addrs[0], "")
 	checkErrorGrace("", err)
 
 	keyCount := 5000
@@ -60,7 +62,7 @@ func TestKeysPerNodeAdv(t *testing.T) {
 
 	servers := make([]*ChordServer, serverCount)
 	for i := 1; i < serverCount; i++ {
-		servers[i], err = MakeChord(addrs[i], initialServer.Node)
+		servers[i], err = MakeChord(defaultConfig, addrs[i], initialServer.Node.Ip)
 		checkErrorGrace("", err)
 	}
 

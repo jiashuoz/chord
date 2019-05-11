@@ -9,43 +9,18 @@ import (
 
 // A wrapper around some grpc internal connections
 type grpcConn struct {
-	ip         string
-	client     chordrpc.ChordClient // Chord service client
-	conn       *grpc.ClientConn     // grpc client for underlying connection
-	lastActive time.Time
-}
-
-func (chord *ChordServer) startCleanupConn() {
-	ticker := time.NewTicker(5 * time.Second)
-	for {
-		select {
-		case <-ticker.C:
-			chord.cleanupConnPool()
-		}
-	}
-}
-
-func (chord *ChordServer) cleanupConnPool() {
-	chord.connectionsPoolRWMu.Lock()
-	defer chord.connectionsPoolRWMu.Unlock()
-	for host, grpcC := range chord.connectionsPool {
-		if time.Since(grpcC.lastActive) > maxIdleTime {
-			grpcC.conn.Close()
-			delete(chord.connectionsPool, host)
-		}
-	}
+	ip     string
+	client chordrpc.ChordClient // Chord service client
+	conn   *grpc.ClientConn     // grpc client for underlying connection
 }
 
 // Dial returns a grpc.ClientConn
-func Dial(ip string) (*grpc.ClientConn, error) {
+func Dial(ip string, options ...grpc.DialOption) (*grpc.ClientConn, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	return grpc.DialContext(ctx,
 		ip,
-		grpc.WithBlock(),
-		grpc.WithTimeout(5*time.Second),
-		grpc.FailOnNonTempDialError(true),
-		grpc.WithInsecure(),
+		options...,
 	)
 }
 
@@ -54,24 +29,22 @@ func (chord *ChordServer) connectRemote(remoteIP string) (chordrpc.ChordClient, 
 	chord.connectionsPoolRWMu.RLock()
 	grpcc, ok := chord.connectionsPool[remoteIP]
 	if ok {
-		grpcc.lastActive = time.Now()
 		chord.connectionsPoolRWMu.RUnlock()
 		return grpcc.client, nil
 	}
 	chord.connectionsPoolRWMu.RUnlock()
 
-	conn, err := Dial(remoteIP)
-	checkErrorGrace("from connectRemote: ", err)
+	conn, err := Dial(remoteIP, chord.config.DialOptions...)
 	if err != nil {
+		chord.logger.Println("connectRemote: Dial: ")
 		return nil, err
 	}
 
 	client := chordrpc.NewChordClient(conn)
-	grpcc = &grpcConn{remoteIP, client, conn, time.Now()}
+	grpcc = &grpcConn{remoteIP, client, conn}
 
 	chord.connectionsPoolRWMu.Lock()
 	chord.connectionsPool[remoteIP] = grpcc
-	grpcc.lastActive = time.Now()
 	chord.connectionsPoolRWMu.Unlock()
 	return client, nil
 }
@@ -83,10 +56,7 @@ func (chord *ChordServer) notifyRPC(remote *chordrpc.Node, potentialPred *chordr
 		return nil, err
 	}
 
-	// ctx, cancel := context.WithDeadline(context.Background())
-	// defer cancel()
 	result, err := client.Notify(context.Background(), potentialPred)
-	checkError("Notify", err)
 	return result, err
 }
 
@@ -98,7 +68,6 @@ func (chord *ChordServer) findSuccessorRPC(remote *chordrpc.Node, id []byte) (*c
 	}
 
 	result, err := client.FindSuccessor(context.Background(), &chordrpc.ID{Id: id})
-	checkError("FindSuccessor", err)
 	return result, err
 }
 
@@ -110,7 +79,6 @@ func (chord *ChordServer) findClosestPrecedingNodeRPC(remote *chordrpc.Node, id 
 	}
 
 	result, err := client.FindClosestPrecedingNode(context.Background(), &chordrpc.ID{Id: id})
-	checkError("findClosestPrecedingNodeRPC", err)
 	return result, err
 }
 
@@ -122,7 +90,6 @@ func (chord *ChordServer) getSuccessorRPC(remote *chordrpc.Node) (*chordrpc.Node
 	}
 
 	result, err := client.GetSuccessor(context.Background(), &chordrpc.NN{})
-	checkError("getSuccessorRPC", err)
 	return result, err
 }
 
@@ -134,7 +101,6 @@ func (chord *ChordServer) getPredecessorRPC(remote *chordrpc.Node) (*chordrpc.No
 	}
 
 	result, err := client.GetPredecessor(context.Background(), &chordrpc.NN{})
-	checkError("getPredecessorRPC", err)
 	return result, err
 }
 
@@ -171,3 +137,24 @@ func (chord *ChordServer) deleteRPC(remoteIP string, key string) (string, error)
 	result, err := client.Delete(context.Background(), request)
 	return result.Val, err
 }
+
+// func (chord *ChordServer) startCleanupConn() {
+// 	ticker := time.NewTicker(5 * time.Second)
+// 	for {
+// 		select {
+// 		case <-ticker.C:
+// 			chord.cleanupConnPool()
+// 		}
+// 	}
+// }
+
+// func (chord *ChordServer) cleanupConnPool() {
+// 	chord.connectionsPoolRWMu.Lock()
+// 	defer chord.connectionsPoolRWMu.Unlock()
+// 	for host, grpcC := range chord.connectionsPool {
+// 		if time.Since(grpcC.lastActive) > maxIdleTime {
+// 			grpcC.conn.Close()
+// 			delete(chord.connectionsPool, host)
+// 		}
+// 	}
+// }
