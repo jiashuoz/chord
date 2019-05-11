@@ -35,6 +35,34 @@ func TestLan160Nodes(t *testing.T) {
 	}
 }
 
+func TestLan100Nodes(t *testing.T) {
+	ringsize := 256
+	defaultConfig.ringSize = 8
+	numOfNodes := 100
+	jump := int(ringsize / numOfNodes)
+	numOfLookup := 200
+
+	s1 := rand.NewSource(time.Now().UnixNano())
+	r1 := rand.New(s1)
+	chords := make([]*ChordServer, ringsize)
+	testAddrs := reverseHash(defaultConfig.ringSize, "127.0.0.1", 5000) // ip addresses in order
+	chords[0], _ = MakeChord(defaultConfig, testAddrs[0], "")
+	for index := 1; index < numOfNodes; index++ {
+		chords[index*jump], _ = MakeChord(defaultConfig, testAddrs[index*jump], testAddrs[0])
+	}
+
+	time.Sleep(5 * time.Second) // let it stabilize
+
+	fmt.Println(chords[0].String())
+
+	for i := 0; i < numOfLookup; i++ {
+		chords[0].Lookup(fmt.Sprintf("%d:%f:%d", r1.Int(), r1.Float64(), r1.Int()))
+		chords[0].tracerRWMu.Lock()
+		fmt.Println(chords[0].tracer.Hops() + " " + chords[0].tracer.Latency())
+		chords[0].tracerRWMu.Unlock()
+	}
+}
+
 func TestLan80Nodes(t *testing.T) {
 	ringsize := 256
 	defaultConfig.ringSize = 8
